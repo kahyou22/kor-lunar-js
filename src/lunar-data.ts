@@ -40,6 +40,8 @@ const MAX_DAY = 29;
 const SMALL_MONTH_DAY = 29;
 const BIG_MONTH_DAY = 30;
 
+const totalDaysBeforeYear: Record<number, number> = {};
+
 const getYearData = (year: number): number => {
   return LUN_TABLE[year - BASE_YEAR];
 };
@@ -105,15 +107,21 @@ const getYearDays = (year: number): number => {
 };
 
 /**
+ * 연도별 누적 일 수를 초기에 룩업 테이블로 생성하여
+ * O(1)으로 누적 일 수를 가져오게 변환함
+ */
+totalDaysBeforeYear[BASE_YEAR] = 0;
+for (let y = BASE_YEAR + 1; y < MAX_YEAR; y++) {
+  totalDaysBeforeYear[y] = totalDaysBeforeYear[y - 1] + getYearDays(y - 1);
+}
+
+/**
  * 1890년부터 해당 연도 전까지의 누적 일 수를 반환합니다.
  * @param year 1890년 ~ 2049년
  * @return 해당 연도 전까지의 누적 일 수
  */
 const getTotalDaysBeforeYear = (year: number): number => {
-  let days = 0;
-  for (let y = BASE_YEAR; y < year; y++) {
-    days += getYearDays(y);
-  }
+  let days = totalDaysBeforeYear[year];
   return days;
 };
 
