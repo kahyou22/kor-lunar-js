@@ -55,6 +55,14 @@ const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLeapMonth:
   let month = SolarData.BASE_MONTH;
   let day = SolarData.BASE_DAY + LunarData.getTotalDays(lunYear, lunMonth, lunDay, isLeapMonth) - 1;
 
+  let yearDays = SolarData.getYearDays(year);
+
+  while (day > yearDays) {
+    day -= yearDays;
+    year++;
+    yearDays = SolarData.getYearDays(year);
+  }
+
   let monthDays = SolarData.getMonthDays(year, month);
 
   while (day > monthDays) {
