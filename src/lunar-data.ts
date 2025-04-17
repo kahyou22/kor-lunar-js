@@ -44,33 +44,71 @@ const getYearData = (year: number): number => {
   return LUN_TABLE[year - BASE_YEAR];
 };
 
+/**
+ * 해당 월 (평달)의 일 수를 반환합니다.
+ * @param year 1890년 ~ 2049년
+ * @param month 1월 ~ 12월
+ * @returns 월의 일 수 (29 또는 30)
+ */
 const getMonthDays = (year: number, month: number): number => {
   const monthType = (getYearData(year) >> (month - 1)) & 0x1;
   return monthType === 0 ? SMALL_MONTH_DAY : BIG_MONTH_DAY;
 };
 
+/**
+ * 해당 연도의 윤달을 반환합니다.
+ * @param year 1890년 ~ 2049년
+ * @returns 윤달 월 (1월 ~ 12월), 없으면 0
+ */
 const getLeapMonth = (year: number): number => {
   return (getYearData(year) >> 12) & 0xf;
 };
 
+/**
+ * 해당 연도에 윤달이 있는지를 반환합니다.
+ * @param year 1890년 ~ 2049년
+ * @return 윤달이 있으면 true
+ */
 const hasLeapMonth = (year: number): boolean => {
   return getLeapMonth(year) !== 0;
 };
 
+/**
+ * 해당 월이 윤달인지를 반환합니다.
+ * @param year 1890년 ~ 2049년
+ * @param month 1월 ~ 12월
+ * @returns 윤달이면 true
+ */
 const isLeapMonth = (year: number, month: number): boolean => {
   return month === getLeapMonth(year);
 };
 
+/**
+ * 해당 월 (윤달)의 일 수를 반환합니다.
+ * @param year 1890년 ~ 2049년
+ * @param month 1월 ~ 12월
+ * @returns 윤달의 일 수 (29 또는 30), 윤달이 아니면 0
+ */
 const getLeapMonthDays = (year: number, month: number): number => {
   if (!isLeapMonth(year, month)) return 0;
   const monthType = (getYearData(year) >> 16) & 0x1;
   return monthType === 0 ? SMALL_MONTH_DAY : BIG_MONTH_DAY;
 };
 
+/**
+ * 해당 연도의 총 일 수를 반환합니다.
+ * @param year 1890년 ~ 2049년
+ * @return 해당 연도의 총 일 수
+ */
 const getYearDays = (year: number): number => {
   return (getYearData(year) >> 17) & 0x1ff;
 };
 
+/**
+ * 1890년부터 해당 연도 전까지의 누적 일 수를 반환합니다.
+ * @param year 1890년 ~ 2049년
+ * @return 해당 연도 전까지의 누적 일 수
+ */
 const getTotalDaysBeforeYear = (year: number): number => {
   let days = 0;
   for (let y = BASE_YEAR; y < year; y++) {
@@ -79,6 +117,13 @@ const getTotalDaysBeforeYear = (year: number): number => {
   return days;
 };
 
+/**
+ * 해당 연도 내에서 해당 월 (및 윤달 포함) 전까지의 누적 일 수를 반환합니다.
+ * @param year 1890년 ~ 2049년
+ * @param month 1월 ~ 12월
+ * @param isLeapMonth 대상이 윤달이면 true
+ * @returns 해당 연도 내, 해당 월 전까지의 누적 일 수
+ */
 const getTotalDaysBeforeMonth = (year: number, month: number, isLeapMonth: boolean): number => {
   let days = 0;
   // 해당 월 전까지 윤달을 포함하여 누적
@@ -96,6 +141,14 @@ const getTotalDaysBeforeMonth = (year: number, month: number, isLeapMonth: boole
   return days;
 };
 
+/**
+ * 1890년부터 해당 연도, 월, 일 (및 윤달 포함) 까지의 누적 일 수를 반환합니다.
+ * @param year 1890년 ~ 2049년
+ * @param month 1월 ~ 12월
+ * @param day 일자
+ * @param isLeapMonth 대상이 윤달이면 true
+ * @returns 총 누적 일 수
+ */
 const getTotalDays = (year: number, month: number, day: number, isLeapMonth: boolean): number => {
   let days = getTotalDaysBeforeYear(year) + getTotalDaysBeforeMonth(year, month, isLeapMonth) + day;
   return days;
