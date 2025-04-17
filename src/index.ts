@@ -88,4 +88,4 @@ const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLeapMonth:
   return { year, month, day };
 };
 
-export const korLunar = { toLunar };
+export const korLunar = { toLunar, toSolar };
