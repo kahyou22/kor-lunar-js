@@ -25,6 +25,14 @@ const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate =
   let leapMonth = LunarData.getLeapMonth(year);
   let monthDays = LunarData.getMonthDays(year, month);
 
+  let yearDays = LunarData.getYearDays(year);
+
+  while (day > yearDays) {
+    year++;
+    day -= yearDays;
+    yearDays = LunarData.getYearDays(year);
+  }
+
   while (day > monthDays) {
     day -= monthDays;
     isLeapMonth = false;
