@@ -21,10 +21,6 @@ const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate =
   let month = LunarData.BASE_MONTH;
   let day = LunarData.BASE_DAY + SolarData.getTotalDays(solYear, solMonth, solDay) - SOLAR_LUNAR_DAY_DIFF - 1;
 
-  let isLeapMonth = false;
-  let leapMonth = LunarData.getLeapMonth(year);
-  let monthDays = LunarData.getMonthDays(year, month);
-
   let yearDays = LunarData.getYearDays(year);
 
   while (day > yearDays) {
@@ -32,6 +28,10 @@ const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate =
     day -= yearDays;
     yearDays = LunarData.getYearDays(year);
   }
+
+  let isLeapMonth = false;
+  let leapMonth = LunarData.getLeapMonth(year);
+  let monthDays = LunarData.getMonthDays(year, month);
 
   while (day > monthDays) {
     day -= monthDays;
