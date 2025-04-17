@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/kahyou22/kor-lunar-js/issues"
   },
-  "homepage": "https://github.com/kahyou22/kor-lunar-js#readme"
+  "homepage": "https://github.com/kahyou22/kor-lunar-js#readme",
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
 }
