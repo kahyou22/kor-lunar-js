@@ -41,7 +41,7 @@ const getYearDays = (year: number): number => {
  * O(1)으로 누적 일 수를 가져오게 변환함
  */
 totalDaysBeforeYear[BASE_YEAR] = 0;
-for (let y = BASE_YEAR + 1; y < MAX_YEAR; y++) {
+for (let y = BASE_YEAR + 1; y <= MAX_YEAR; y++) {
   totalDaysBeforeYear[y] = totalDaysBeforeYear[y - 1] + getYearDays(y - 1);
 }
 
