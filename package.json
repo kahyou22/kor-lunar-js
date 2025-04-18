@@ -1,7 +1,7 @@
 {
   "name": "kor-lunar",
   "version": "1.0.0",
-  "description": "",
+  "description": "한국 음력 변환 유틸 / Korean lunar calendar converter",
   "main": "dist/kor-lunar.js",
   "module": "dist/kor-lunar.esm.js",
   "types": "dist/kor-lunar.d.ts",
@@ -12,15 +12,26 @@
       "require": "./dist/kor-lunar.js"
     }
   },
+  "files": [
+    "dist/"
+  ],
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kahyou22/kor-lunar-js.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "한국",
+    "음력",
+    "달력",
+    "korean",
+    "lunar",
+    "calendar"
+  ],
+  "author": "kahyou",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kahyou22/kor-lunar-js/issues"
