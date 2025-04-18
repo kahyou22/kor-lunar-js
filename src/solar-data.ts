@@ -8,12 +8,19 @@ const LEAP_YEAR_DAY = 366;
 const BASE_YEAR = 1890;
 const BASE_MONTH = 1;
 const BASE_DAY = 21;
+const BASE_VALUE = BASE_YEAR * 10000 + BASE_MONTH * 100 + BASE_DAY;
 
 const MAX_YEAR = 2050;
 const MAX_MONTH = 1;
 const MAX_DAY = 22;
+const MAX_VALUE = MAX_YEAR * 10000 + MAX_MONTH * 100 + MAX_DAY;
 
 const totalDaysBeforeYear: Record<number, number> = {};
+
+const checkRangeDate = (year: number, month: number, day: number) => {
+  const value = year * 10000 + month * 100 + day;
+  if (value < BASE_VALUE || value > MAX_VALUE) return false;
+};
 
 const isLeapYear = (year: number): boolean => {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
@@ -60,9 +67,12 @@ export const SolarData = {
   BASE_YEAR,
   BASE_MONTH,
   BASE_DAY,
+  BASE_VALUE,
   MAX_YEAR,
   MAX_MONTH,
   MAX_DAY,
+  MAX_VALUE,
+  checkRangeDate,
   isLeapYear,
   getMonthDays,
   getYearDays,
