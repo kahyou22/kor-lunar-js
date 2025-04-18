@@ -2,9 +2,18 @@
   "name": "kor-lunar",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/kor-lunar.js",
+  "module": "dist/kor-lunar.esm.js",
+  "types": "dist/kor-lunar.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/kor-lunar.d.ts",
+      "import": "./dist/kor-lunar.esm.js",
+      "require": "./dist/kor-lunar.js"
+    }
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
