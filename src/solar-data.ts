@@ -17,9 +17,9 @@ const MAX_VALUE = MAX_YEAR * 10000 + MAX_MONTH * 100 + MAX_DAY;
 
 const totalDaysBeforeYear: Record<number, number> = {};
 
-const checkRangeDate = (year: number, month: number, day: number) => {
+const checkRangeDate = (year: number, month: number, day: number): boolean => {
   const value = year * 10000 + month * 100 + day;
-  if (value < BASE_VALUE || value > MAX_VALUE) return false;
+  return value >= BASE_VALUE && value <= MAX_VALUE;
 };
 
 const isLeapYear = (year: number): boolean => {

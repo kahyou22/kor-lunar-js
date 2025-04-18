@@ -44,9 +44,9 @@ const BIG_MONTH_DAY = 30;
 
 const totalDaysBeforeYear: Record<number, number> = {};
 
-const checkRangeDate = (year: number, month: number, day: number) => {
+const checkRangeDate = (year: number, month: number, day: number): boolean => {
   const value = year * 10000 + month * 100 + day;
-  if (value < BASE_VALUE || value > MAX_VALUE) return false;
+  return value >= BASE_VALUE && value <= MAX_VALUE;
 };
 
 const getYearData = (year: number): number => {
