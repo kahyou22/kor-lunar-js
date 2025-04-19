@@ -6,9 +6,11 @@
 
 ## 특징
 
-- 음력 ↔ 양력 변환 지원
-- 윤달 처리 가능 (`isLeapMonth` 옵션)
-- 오프라인 환경에서도 사용 가능
+- **음력 ↔ 양력 변환** 지원
+- **윤달 처리** 가능 (`isLeapMonth` 옵션)
+- **음력 간지 출력**: 세차(`secha`), 월건(`wolgeon`), 일진(`iljin`) 포함
+  - 윤달인 경우 `wolgeon`은 빈 문자열로 반환됩니다
+- **오프라인** 환경에서도 사용 가능
 
 ## 지원 날짜 범위
 
@@ -44,15 +46,33 @@ const korLunar = require("kor-lunar");
 ```js
 import korLunar from "kor-lunar";
 
-// 양력 → 음력 (isLeapMonth: false = 평달, true = 윤달)
+// 양력 → 음력
 console.log(korLunar.toLunar(2025, 6, 25));
-// { year: 2025, month: 6, day: 1, isLeapMonth: false }
+// {
+//   year: 2025,
+//   month: 6,
+//   day: 1,
+//   isLeapMonth: false,
+//   secha: '을사',
+//   wolgeon: '계미',
+//   iljin: '을축'
+// }
+
 console.log(korLunar.toLunar(2025, 7, 25));
-// { year: 2025, month: 6, day: 1, isLeapMonth: true }
+// {
+//   year: 2025,
+//   month: 6,
+//   day: 1,
+//   isLeapMonth: true,
+//   secha: '을사',
+//   wolgeon: '',        // 윤달인 경우 월건은 빈 문자열
+//   iljin: '을미'
+// }
 
 // 음력 → 양력
 console.log(korLunar.toSolar(2025, 6, 1, false));
 // { year: 2025, month: 6, day: 25 }
+
 console.log(korLunar.toSolar(2025, 6, 1, true));
 // { year: 2025, month: 7, day: 25 }
 ```
