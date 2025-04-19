@@ -8,6 +8,9 @@ interface LunarDate {
   month: number;
   day: number;
   isLeapMonth: boolean;
+  secha: string;
+  wolgeon: string;
+  iljin: string;
 }
 
 interface SolarDate {
@@ -24,6 +27,8 @@ const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate =
   let year = LunarData.BASE_YEAR;
   let month = LunarData.BASE_MONTH;
   let day = LunarData.BASE_DAY + SolarData.getTotalDays(solYear, solMonth, solDay) - SOLAR_LUNAR_DAY_DIFF - 1;
+
+  let dayIndex = day - 1;
 
   let yearDays = LunarData.getYearDays(year);
 
@@ -59,7 +64,15 @@ const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate =
     monthDays = LunarData.getMonthDays(year, month);
   }
 
-  return { year, month, day, isLeapMonth };
+  return {
+    year,
+    month,
+    day,
+    isLeapMonth,
+    secha: LunarData.getSecha(year),
+    wolgeon: isLeapMonth ? "" : LunarData.getWolgeon(year, month),
+    iljin: LunarData.getIljinByDayIndex(dayIndex),
+  };
 };
 
 const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLeapMonth: boolean): SolarDate => {

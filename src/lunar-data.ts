@@ -29,6 +29,9 @@ const LUN_TABLE = [
   /*2040*/ 0x2c6056d, 0x2c60b69, 0x3002daa, 0x2c40d92, 0x3007ea5, 0x2c40d25, 0x2c40a4d, 0x3015a4d, 0x2c402b6, 0x2c605b5,
 ];
 
+const gan = ["갑", "을", "병", "정", "무", "기", "경", "신", "임", "계"];
+const ji = ["자", "축", "인", "묘", "진", "사", "오", "미", "신", "유", "술", "해"];
+
 const BASE_YEAR = 1890;
 const BASE_MONTH = 1;
 const BASE_DAY = 1;
@@ -169,6 +172,30 @@ const getTotalDays = (year: number, month: number, day: number, isLeapMonth: boo
   return days;
 };
 
+const getSecha = (year: number): string => {
+  const g = gan[(year + 6) % gan.length];
+  const j = ji[(year + 8) % ji.length];
+  return g + j;
+};
+
+const getWolgeon = (year: number, month: number): string => {
+  const g = gan[(year * 2 + month + 3) % gan.length];
+  const j = ji[(month + 1) % ji.length];
+  return g + j;
+};
+
+const getIljinByDayIndex = (dayIndex: number): string => {
+  dayIndex += 1;
+  const g = gan[(dayIndex + 7) % gan.length];
+  const j = ji[(dayIndex + 1) % ji.length];
+  return g + j;
+};
+
+const getIljin = (year: number, month: number, day: number, isLeapMonth: boolean): string => {
+  const days = getTotalDays(year, month, day, isLeapMonth);
+  return getIljinByDayIndex(days - 1);
+};
+
 export const LunarData = {
   BASE_YEAR,
   BASE_MONTH,
@@ -188,4 +215,8 @@ export const LunarData = {
   getTotalDaysBeforeYear,
   getTotalDaysBeforeMonth,
   getTotalDays,
+  getSecha,
+  getWolgeon,
+  getIljin,
+  getIljinByDayIndex,
 };
