@@ -18,6 +18,7 @@
   ],
   "scripts": {
     "build": "rollup -c",
+    "version": "node update-readme-version.js && git add README.md",
     "postversion": "git push && git push --tags"
   },
   "repository": {
