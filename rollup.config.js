@@ -1,5 +1,3 @@
-import resolve from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
 import typescript from "rollup-plugin-typescript2";
 import { terser } from "rollup-plugin-terser";
 
@@ -13,7 +11,7 @@ export default [
       exports: "auto",
       sourcemap: true,
     },
-    plugins: [resolve(), commonjs(), typescript()],
+    plugins: [typescript()],
   },
   // ESM 번들
   {
@@ -23,7 +21,7 @@ export default [
       format: "esm",
       sourcemap: true,
     },
-    plugins: [resolve(), commonjs(), typescript()],
+    plugins: [typescript()],
   },
   // Minified IIFE 번들
   {
@@ -34,6 +32,6 @@ export default [
       name: "korLunar",
       sourcemap: true,
     },
-    plugins: [resolve(), commonjs(), typescript(), terser()],
+    plugins: [typescript(), terser()],
   },
 ];
