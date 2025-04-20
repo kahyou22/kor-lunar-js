@@ -17,11 +17,6 @@ const MAX_VALUE = MAX_YEAR * 10000 + MAX_MONTH * 100 + MAX_DAY;
 
 const totalDaysBeforeYear: Record<number, number> = {};
 
-const checkRangeDate = (year: number, month: number, day: number): boolean => {
-  const value = year * 10000 + month * 100 + day;
-  return value >= BASE_VALUE && value <= MAX_VALUE;
-};
-
 const isLeapYear = (year: number): boolean => {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 };
@@ -63,6 +58,40 @@ const getTotalDays = (year: number, month: number, day: number): number => {
   return days;
 };
 
+/**
+ * 날짜가 지원하는 범위 내에 있는지를 반환합니다.
+ * 날짜의 유효성 (존재 여부)은 검사하지 않습니다.
+ * @returns 날짜가 범위 내에 있으면 true
+ */
+const isDateInRange = (year: number, month: number, day: number): boolean => {
+  const value = year * 10000 + month * 100 + day;
+  return value >= BASE_VALUE && value <= MAX_VALUE;
+};
+
+/**
+ * 실제로 존재하는 유효한 날짜인지를 반환합니다.
+ * @returns 유효한 날짜이면 true
+ */
+const isValidDate = (year: number, month: number, day: number): boolean => {
+  if (year < BASE_YEAR || year > MAX_YEAR) return false;
+
+  if (year === BASE_YEAR) {
+    if (month < BASE_MONTH) return false;
+    if (month === BASE_MONTH && day < BASE_DAY) return false;
+  }
+
+  if (year === MAX_YEAR) {
+    if (month > MAX_MONTH) return false;
+    if (month === MAX_MONTH && day > MAX_DAY) return false;
+  }
+
+  if (month < 1 || month > 12) return false;
+  if (day < 1) return false;
+
+  const endDay = getMonthDays(year, month);
+  return day <= endDay;
+};
+
 export const SolarData = {
   BASE_YEAR,
   BASE_MONTH,
@@ -72,9 +101,10 @@ export const SolarData = {
   MAX_MONTH,
   MAX_DAY,
   MAX_VALUE,
-  checkRangeDate,
   isLeapYear,
   getMonthDays,
   getYearDays,
   getTotalDays,
+  isDateInRange,
+  isValidDate,
 };

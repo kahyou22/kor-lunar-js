@@ -20,7 +20,7 @@ interface SolarDate {
 }
 
 const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate => {
-  if (!SolarData.checkRangeDate(solYear, solMonth, solDay)) {
+  if (!SolarData.isDateInRange(solYear, solMonth, solDay)) {
     throw new RangeError(`지원되지 않는 날짜입니다. 입력한 날짜: ${solYear}-${solMonth}-${solDay}`);
   }
 
@@ -76,7 +76,7 @@ const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate =
 };
 
 const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLeapMonth: boolean): SolarDate => {
-  if (!LunarData.checkRangeDate(lunYear, lunMonth, lunDay)) {
+  if (!LunarData.isDateInRange(lunYear, lunMonth, lunDay)) {
     throw new RangeError(`지원되지 않는 날짜입니다. 입력한 날짜: ${lunYear}-${lunMonth}-${lunDay}`);
   }
 
