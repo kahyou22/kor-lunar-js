@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>양력/음력 변환기</title>
+  </head>
+  <body>
+    <main>
+      <div id="solarLunar" class="card-container">
+        <div class="title">양력 → 음력</div>
+        <div class="tabs">
+          <input type="radio" id="tab1" name="sol-type" value="date" checked />
+          <label for="tab1">달력</label>
+          <input type="radio" id="tab2" name="sol-type" value="text" />
+          <label for="tab2">직접 입력</label>
+          <div class="fields tab-content tab1">
+            <input type="date" id="solDate" />
+          </div>
+          <div class="fields tab-content tab2">
+            <input type="number" min="1890" max="2049" placeholder="년" id="solYear" />
+            <input type="number" min="1" max="12" placeholder="월" id="solMonth" />
+            <input type="number" min="1" max="31" placeholder="일" id="sonDay" />
+          </div>
+        </div>
+        <button class="btn">변환</button>
+        <pre class="code"></pre>
+      </div>
+      <div id="lunarSolar" class="card-container">
+        <div class="title">음력 → 양력</div>
+        <div class="fields">
+          <input type="number" min="1890" max="2049" placeholder="년" id="lunYear" />
+          <input type="number" min="1" max="12" placeholder="월" id="lunMonth" />
+          <input type="number" min="1" max="30" placeholder="일" id="sonDay" />
+        </div>
+        <div class="toggle-group">
+          <input type="radio" id="normal" name="leap" value="normal" checked />
+          <label for="normal">평달</label>
+          <input type="radio" id="leap" name="leap" value="leap" />
+          <label for="leap">윤달</label>
+          <input type="radio" id="all" name="leap" value="all" />
+          <label for="all">모름</label>
+        </div>
+        <button class="btn">변환</button>
+        <pre class="code"></pre>
+      </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/kor-lunar/dist/kor-lunar.min.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>
