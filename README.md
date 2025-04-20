@@ -12,6 +12,8 @@
   - 윤달인 경우 `wolgeon`은 빈 문자열로 반환됩니다
 - **오프라인** 환경에서도 사용 가능
 
+- [예제 사이트](https://kahyou22.github.io/kor-lunar-js/)
+
 ## 지원 날짜 범위
 
 - **toLunar**: `양력 → 음력` 날짜 범위 1890년 1월 21일 ~ 2050년 1월 22일
@@ -42,6 +44,8 @@ const korLunar = require("kor-lunar");
 ```
 
 ## 예제
+
+[예제 사이트](https://kahyou22.github.io/kor-lunar-js/)
 
 ```js
 import korLunar from "kor-lunar";
