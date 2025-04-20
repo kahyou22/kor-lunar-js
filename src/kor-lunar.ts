@@ -110,4 +110,4 @@ const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLeapMonth:
 };
 
 export type { LunarDate, SolarDate };
-export { toLunar, toSolar };
+export { toLunar, toSolar, LunarData, SolarData };
