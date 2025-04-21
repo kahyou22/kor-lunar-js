@@ -17,6 +17,11 @@ body {
   box-sizing: border-box;
 }
 
+a {
+  color: var(--btn-color);
+  text-decoration: none;
+}
+
 main {
   display: flex;
   flex-direction: column;
