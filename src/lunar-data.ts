@@ -179,16 +179,15 @@ const getWolgeon = (year: number, month: number): string => {
   return g + j;
 };
 
-const getIljinByDayIndex = (dayIndex: number): string => {
-  dayIndex += 1;
-  const g = gan[(dayIndex + 7) % gan.length];
-  const j = ji[(dayIndex + 1) % ji.length];
+const getIljinByJulianDay = (julianDay: number): string => {
+  const g = gan[(julianDay - 1) % gan.length];
+  const j = ji[(julianDay + 1) % ji.length];
   return g + j;
 };
 
 const getIljin = (year: number, month: number, day: number, isLeapMonth: boolean): string => {
   const days = getTotalDays(year, month, day, isLeapMonth);
-  return getIljinByDayIndex(days - 1);
+  return getIljinByJulianDay(days - 1);
 };
 
 /**
@@ -246,7 +245,7 @@ export const LunarData = {
   getSecha,
   getWolgeon,
   getIljin,
-  getIljinByDayIndex,
+  getIljinByJulianDay,
   isDateInRange,
   isValidDate,
 };
