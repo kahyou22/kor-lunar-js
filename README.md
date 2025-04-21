@@ -81,6 +81,10 @@ console.log(korLunar.toSolar(2025, 6, 1, true));
 // { year: 2025, month: 7, day: 25 }
 ```
 
+> 권장되진 않지만, `korLunar.LunarData`나 `korLunar.SolarData` 같은 내부 함수에 직접 접근할 수도 있습니다.  
+> 이를 통해 단순 음력 변환을 넘어, 더 다양한 기능을 구현할 수 있습니다.  
+> [예제 사이트: 음력 달력](https://kahyou22.github.io/kor-lunar-js/#lunarCalendar)
+
 ## 라이선스
 
 [MIT](LICENSE)
