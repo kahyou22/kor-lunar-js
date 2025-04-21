@@ -12,6 +12,8 @@ interface LunarDate {
   secha: string;
   wolgeon: string;
   iljin: string;
+  julianDay: number;
+  dayOfWeek: number;
 }
 
 interface SolarDate {
@@ -30,6 +32,7 @@ const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate =
   let day = LunarData.BASE_DAY + SolarData.getTotalDays(solYear, solMonth, solDay) - SOLAR_LUNAR_DAY_DIFF - 1;
 
   let julianDay = JULIAN_DAY_DIFF + day - 1;
+  let dayOfWeek = (day + 1) % 7;
 
   let yearDays = LunarData.getYearDays(year);
 
@@ -73,6 +76,8 @@ const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate =
     secha: LunarData.getSecha(year),
     wolgeon: isLeapMonth ? "" : LunarData.getWolgeon(year, month),
     iljin: LunarData.getIljinByJulianDay(julianDay),
+    julianDay,
+    dayOfWeek,
   };
 };
 
