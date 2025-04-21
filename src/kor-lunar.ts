@@ -2,6 +2,7 @@ import { LunarData } from "./lunar-data";
 import { SolarData } from "./solar-data";
 
 const SOLAR_LUNAR_DAY_DIFF = 20;
+const JULIAN_DAY_DIFF = 2411389;
 
 interface LunarDate {
   year: number;
@@ -28,7 +29,7 @@ const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate =
   let month = LunarData.BASE_MONTH;
   let day = LunarData.BASE_DAY + SolarData.getTotalDays(solYear, solMonth, solDay) - SOLAR_LUNAR_DAY_DIFF - 1;
 
-  let dayIndex = day - 1;
+  let julianDay = JULIAN_DAY_DIFF + day - 1;
 
   let yearDays = LunarData.getYearDays(year);
 
@@ -71,7 +72,7 @@ const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate =
     isLeapMonth,
     secha: LunarData.getSecha(year),
     wolgeon: isLeapMonth ? "" : LunarData.getWolgeon(year, month),
-    iljin: LunarData.getIljinByDayIndex(dayIndex),
+    iljin: LunarData.getIljinByJulianDay(julianDay),
   };
 };
 
