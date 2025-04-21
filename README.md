@@ -40,7 +40,7 @@ const korLunar = require("kor-lunar");
 ### 브라우저 CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/kor-lunar@1.3.0/dist/kor-lunar.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/kor-lunar@1.3.1/dist/kor-lunar.min.js"></script>
 ```
 
 ## 예제
