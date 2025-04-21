@@ -23,7 +23,7 @@ main {
   justify-content: center;
   align-items: center;
   margin: 32px 10px;
-  gap: 3rem;
+  gap: 4rem;
 }
 
 .card-container {
@@ -36,6 +36,10 @@ main {
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   box-shadow: rgba(0, 0, 0, 0.04) 0px 6px 14px 0px;
+}
+
+.card-container:last-of-type {
+  margin-bottom: 30vh;
 }
 
 .card-container .title {
