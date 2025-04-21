@@ -148,3 +148,31 @@ main {
   border-radius: var(--radius);
   word-break: break-all;
 }
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar .day {
+  padding: 8px;
+  text-align: center;
+}
+
+.calendar .header {
+  font-weight: bold;
+  background-color: #f4f4f4;
+}
+
+.calendar .today {
+  background-color: var(--btn-color);
+  color: var(--btn-text-color);
+  border-radius: var(--radius);
+  font-weight: bold;
+}
