@@ -59,7 +59,9 @@ console.log(korLunar.toLunar(2025, 6, 25));
 //   isLeapMonth: false,
 //   secha: '을사',
 //   wolgeon: '계미',
-//   iljin: '을축'
+//   iljin: '을축',
+//   julianDay: 2460852,
+//   dayOfWeek: 3
 // }
 
 console.log(korLunar.toLunar(2025, 7, 25));
@@ -70,7 +72,9 @@ console.log(korLunar.toLunar(2025, 7, 25));
 //   isLeapMonth: true,
 //   secha: '을사',
 //   wolgeon: '',        // 윤달인 경우 월건은 빈 문자열
-//   iljin: '을미'
+//   iljin: '을미',
+//   julianDay: 2460882,
+//   dayOfWeek: 5
 // }
 
 // 음력 → 양력
