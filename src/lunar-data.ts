@@ -34,15 +34,15 @@ const LUN_TABLE = [
 const gan = ["갑", "을", "병", "정", "무", "기", "경", "신", "임", "계"];
 const ji = ["자", "축", "인", "묘", "진", "사", "오", "미", "신", "유", "술", "해"];
 
-const BASE_YEAR = 1890;
-const BASE_MONTH = 1;
-const BASE_DAY = 1;
-const BASE_VALUE = BASE_YEAR * 10000 + BASE_MONTH * 100 + BASE_DAY;
+export const BASE_YEAR = 1890;
+export const BASE_MONTH = 1;
+export const BASE_DAY = 1;
+export const BASE_VALUE = BASE_YEAR * 10000 + BASE_MONTH * 100 + BASE_DAY;
 
-const MAX_YEAR = 2049;
-const MAX_MONTH = 12;
-const MAX_DAY = 29;
-const MAX_VALUE = MAX_YEAR * 10000 + MAX_MONTH * 100 + MAX_DAY;
+export const MAX_YEAR = 2049;
+export const MAX_MONTH = 12;
+export const MAX_DAY = 29;
+export const MAX_VALUE = MAX_YEAR * 10000 + MAX_MONTH * 100 + MAX_DAY;
 
 const SMALL_MONTH_DAY = 29;
 const BIG_MONTH_DAY = 30;
@@ -60,7 +60,7 @@ const getYearData = (year: number): number => {
  * @param month 1월 ~ 12월
  * @returns 월의 일 수 (29 또는 30)
  */
-const getMonthDays = (year: number, month: number): number => {
+export const getMonthDays = (year: number, month: number): number => {
   month = toInt(month);
   const monthType = (getYearData(year) >> (month - 1)) & 0x1;
   return monthType === 0 ? SMALL_MONTH_DAY : BIG_MONTH_DAY;
@@ -71,7 +71,7 @@ const getMonthDays = (year: number, month: number): number => {
  * @param year 1890년 ~ 2049년
  * @returns 윤달 월 (1월 ~ 12월), 없으면 0
  */
-const getLeapMonth = (year: number): number => {
+export const getLeapMonth = (year: number): number => {
   return (getYearData(year) >> 12) & 0xf;
 };
 
@@ -80,7 +80,7 @@ const getLeapMonth = (year: number): number => {
  * @param year 1890년 ~ 2049년
  * @return 윤달이 있으면 true
  */
-const hasLeapMonth = (year: number): boolean => {
+export const hasLeapMonth = (year: number): boolean => {
   return getLeapMonth(year) !== 0;
 };
 
@@ -90,7 +90,7 @@ const hasLeapMonth = (year: number): boolean => {
  * @param month 1월 ~ 12월
  * @returns 윤달이면 true
  */
-const isLeapMonth = (year: number, month: number): boolean => {
+export const isLeapMonth = (year: number, month: number): boolean => {
   month = toInt(month);
   return month === getLeapMonth(year);
 };
@@ -101,7 +101,7 @@ const isLeapMonth = (year: number, month: number): boolean => {
  * @param month 1월 ~ 12월
  * @returns 윤달의 일 수 (29 또는 30), 윤달이 아니면 0
  */
-const getLeapMonthDays = (year: number, month: number): number => {
+export const getLeapMonthDays = (year: number, month: number): number => {
   if (!isLeapMonth(year, month)) return 0;
   const monthType = (getYearData(year) >> 16) & 0x1;
   return monthType === 0 ? SMALL_MONTH_DAY : BIG_MONTH_DAY;
@@ -112,7 +112,7 @@ const getLeapMonthDays = (year: number, month: number): number => {
  * @param year 1890년 ~ 2049년
  * @return 해당 연도의 총 일 수
  */
-const getYearDays = (year: number): number => {
+export const getYearDays = (year: number): number => {
   return (getYearData(year) >> 17) & 0x1ff;
 };
 
@@ -130,7 +130,7 @@ for (let y = BASE_YEAR + 1; y <= MAX_YEAR; y++) {
  * @param year 1890년 ~ 2049년
  * @return 해당 연도 전까지의 누적 일 수
  */
-const getTotalDaysBeforeYear = (year: number): number => {
+export const getTotalDaysBeforeYear = (year: number): number => {
   year = toInt(year);
   let days = totalDaysBeforeYear[year];
   return days;
@@ -143,7 +143,7 @@ const getTotalDaysBeforeYear = (year: number): number => {
  * @param isLeapMonth 대상이 윤달이면 true
  * @returns 해당 연도 내, 해당 월 전까지의 누적 일 수
  */
-const getTotalDaysBeforeMonth = (year: number, month: number, isLeapMonth: boolean): number => {
+export const getTotalDaysBeforeMonth = (year: number, month: number, isLeapMonth: boolean): number => {
   month = toInt(month);
   let days = 0;
   // 해당 월 전까지 윤달을 포함하여 누적
@@ -169,20 +169,20 @@ const getTotalDaysBeforeMonth = (year: number, month: number, isLeapMonth: boole
  * @param isLeapMonth 대상이 윤달이면 true
  * @returns 총 누적 일 수
  */
-const getTotalDays = (year: number, month: number, day: number, isLeapMonth: boolean): number => {
+export const getTotalDays = (year: number, month: number, day: number, isLeapMonth: boolean): number => {
   day = toInt(day);
   let days = getTotalDaysBeforeYear(year) + getTotalDaysBeforeMonth(year, month, isLeapMonth) + day;
   return days;
 };
 
-const getSecha = (year: number): string => {
+export const getSecha = (year: number): string => {
   year = toInt(year);
   const g = gan[(year + 6) % gan.length];
   const j = ji[(year + 8) % ji.length];
   return g + j;
 };
 
-const getWolgeon = (year: number, month: number): string => {
+export const getWolgeon = (year: number, month: number): string => {
   year = toInt(year);
   month = toInt(month);
   const g = gan[(year * 2 + month + 3) % gan.length];
@@ -190,14 +190,14 @@ const getWolgeon = (year: number, month: number): string => {
   return g + j;
 };
 
-const getIljinByJulianDay = (julianDay: number): string => {
+export const getIljinByJulianDay = (julianDay: number): string => {
   julianDay = toInt(julianDay);
   const g = gan[(julianDay - 1) % gan.length];
   const j = ji[(julianDay + 1) % ji.length];
   return g + j;
 };
 
-const getIljin = (year: number, month: number, day: number, isLeapMonth: boolean): string => {
+export const getIljin = (year: number, month: number, day: number, isLeapMonth: boolean): string => {
   const days = getTotalDays(year, month, day, isLeapMonth);
   return getIljinByJulianDay(days - 1);
 };
@@ -207,7 +207,7 @@ const getIljin = (year: number, month: number, day: number, isLeapMonth: boolean
  * 날짜의 유효성 (존재 여부)은 검사하지 않습니다.
  * @returns 날짜가 범위 내에 있으면 true
  */
-const isDateInRange = (year: number, month: number, day: number): boolean => {
+export const isDateInRange = (year: number, month: number, day: number): boolean => {
   year = toInt(year);
   month = toInt(month);
   day = toInt(day);
@@ -219,7 +219,7 @@ const isDateInRange = (year: number, month: number, day: number): boolean => {
  * 실제로 존재하는 유효한 날짜인지를 반환합니다.
  * @returns 유효한 날짜이면 true
  */
-const isValidDate = (year: number, month: number, day: number, isLeapMonth: boolean): boolean => {
+export const isValidDate = (year: number, month: number, day: number, isLeapMonth: boolean): boolean => {
   year = toInt(year);
   month = toInt(month);
   day = toInt(day);
@@ -240,30 +240,4 @@ const isValidDate = (year: number, month: number, day: number, isLeapMonth: bool
 
   const endDay = isLeapMonth ? getLeapMonthDays(year, month) : getMonthDays(year, month);
   return day <= endDay;
-};
-
-export const LunarData = {
-  BASE_YEAR,
-  BASE_MONTH,
-  BASE_DAY,
-  BASE_VALUE,
-  MAX_YEAR,
-  MAX_MONTH,
-  MAX_DAY,
-  MAX_VALUE,
-  getMonthDays,
-  getLeapMonth,
-  hasLeapMonth,
-  isLeapMonth,
-  getLeapMonthDays,
-  getYearDays,
-  getTotalDaysBeforeYear,
-  getTotalDaysBeforeMonth,
-  getTotalDays,
-  getSecha,
-  getWolgeon,
-  getIljin,
-  getIljinByJulianDay,
-  isDateInRange,
-  isValidDate,
 };

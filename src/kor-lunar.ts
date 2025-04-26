@@ -1,11 +1,11 @@
-import { LunarData } from "./lunar-data";
-import { SolarData } from "./solar-data";
+import * as LunarData from "./lunar-data";
+import * as SolarData from "./solar-data";
 import { toInt } from "./utils";
 
 const SOLAR_LUNAR_DAY_DIFF = 20;
 const JULIAN_DAY_DIFF = 2411389;
 
-interface LunarDate {
+export interface LunarDate {
   year: number;
   month: number;
   day: number;
@@ -17,13 +17,13 @@ interface LunarDate {
   dayOfWeek: number;
 }
 
-interface SolarDate {
+export interface SolarDate {
   year: number;
   month: number;
   day: number;
 }
 
-const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate => {
+export const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate => {
   solYear = toInt(solYear);
   solMonth = toInt(solMonth);
   solDay = toInt(solDay);
@@ -86,7 +86,7 @@ const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate =
   };
 };
 
-const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLeapMonth: boolean): SolarDate => {
+export const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLeapMonth: boolean): SolarDate => {
   lunYear = toInt(lunYear);
   lunMonth = toInt(lunMonth);
   lunDay = toInt(lunDay);
@@ -124,5 +124,5 @@ const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLeapMonth:
   return { year, month, day };
 };
 
-export type { LunarDate, SolarDate };
-export { toLunar, toSolar, LunarData, SolarData };
+export * as LunarData from "./lunar-data";
+export * as SolarData from "./solar-data";
