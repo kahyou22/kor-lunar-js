@@ -1,3 +1,5 @@
+import { toInt } from "./utils";
+
 /**
  * 음력 테이블
  *
@@ -48,6 +50,7 @@ const BIG_MONTH_DAY = 30;
 const totalDaysBeforeYear: Record<number, number> = {};
 
 const getYearData = (year: number): number => {
+  year = toInt(year);
   return LUN_TABLE[year - BASE_YEAR];
 };
 
@@ -58,6 +61,7 @@ const getYearData = (year: number): number => {
  * @returns 월의 일 수 (29 또는 30)
  */
 const getMonthDays = (year: number, month: number): number => {
+  month = toInt(month);
   const monthType = (getYearData(year) >> (month - 1)) & 0x1;
   return monthType === 0 ? SMALL_MONTH_DAY : BIG_MONTH_DAY;
 };
@@ -87,6 +91,7 @@ const hasLeapMonth = (year: number): boolean => {
  * @returns 윤달이면 true
  */
 const isLeapMonth = (year: number, month: number): boolean => {
+  month = toInt(month);
   return month === getLeapMonth(year);
 };
 
@@ -126,6 +131,7 @@ for (let y = BASE_YEAR + 1; y <= MAX_YEAR; y++) {
  * @return 해당 연도 전까지의 누적 일 수
  */
 const getTotalDaysBeforeYear = (year: number): number => {
+  year = toInt(year);
   let days = totalDaysBeforeYear[year];
   return days;
 };
@@ -138,6 +144,7 @@ const getTotalDaysBeforeYear = (year: number): number => {
  * @returns 해당 연도 내, 해당 월 전까지의 누적 일 수
  */
 const getTotalDaysBeforeMonth = (year: number, month: number, isLeapMonth: boolean): number => {
+  month = toInt(month);
   let days = 0;
   // 해당 월 전까지 윤달을 포함하여 누적
   for (let m = 1; m < month; m++) {
@@ -163,23 +170,28 @@ const getTotalDaysBeforeMonth = (year: number, month: number, isLeapMonth: boole
  * @returns 총 누적 일 수
  */
 const getTotalDays = (year: number, month: number, day: number, isLeapMonth: boolean): number => {
+  day = toInt(day);
   let days = getTotalDaysBeforeYear(year) + getTotalDaysBeforeMonth(year, month, isLeapMonth) + day;
   return days;
 };
 
 const getSecha = (year: number): string => {
+  year = toInt(year);
   const g = gan[(year + 6) % gan.length];
   const j = ji[(year + 8) % ji.length];
   return g + j;
 };
 
 const getWolgeon = (year: number, month: number): string => {
+  year = toInt(year);
+  month = toInt(month);
   const g = gan[(year * 2 + month + 3) % gan.length];
   const j = ji[(month + 1) % ji.length];
   return g + j;
 };
 
 const getIljinByJulianDay = (julianDay: number): string => {
+  julianDay = toInt(julianDay);
   const g = gan[(julianDay - 1) % gan.length];
   const j = ji[(julianDay + 1) % ji.length];
   return g + j;
@@ -196,6 +208,9 @@ const getIljin = (year: number, month: number, day: number, isLeapMonth: boolean
  * @returns 날짜가 범위 내에 있으면 true
  */
 const isDateInRange = (year: number, month: number, day: number): boolean => {
+  year = toInt(year);
+  month = toInt(month);
+  day = toInt(day);
   const value = year * 10000 + month * 100 + day;
   return value >= BASE_VALUE && value <= MAX_VALUE;
 };
@@ -205,6 +220,9 @@ const isDateInRange = (year: number, month: number, day: number): boolean => {
  * @returns 유효한 날짜이면 true
  */
 const isValidDate = (year: number, month: number, day: number, isLeapMonth: boolean): boolean => {
+  year = toInt(year);
+  month = toInt(month);
+  day = toInt(day);
   if (year < BASE_YEAR || year > MAX_YEAR) return false;
 
   if (year === BASE_YEAR) {

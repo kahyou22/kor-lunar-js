@@ -1,3 +1,5 @@
+import { toInt } from "./utils";
+
 const MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 const LEAP_FEBRUARY_DAY = 29;
@@ -18,10 +20,12 @@ const MAX_VALUE = MAX_YEAR * 10000 + MAX_MONTH * 100 + MAX_DAY;
 const totalDaysBeforeYear: Record<number, number> = {};
 
 const isLeapYear = (year: number): boolean => {
+  year = toInt(year);
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 };
 
 const getMonthDays = (year: number, month: number): number => {
+  month = toInt(month);
   let day = month == 2 && isLeapYear(year) ? LEAP_FEBRUARY_DAY : MONTH_DAYS[month - 1];
   return day;
 };
@@ -41,6 +45,7 @@ for (let y = BASE_YEAR + 1; y <= MAX_YEAR; y++) {
 }
 
 const getTotalDaysBeforeYear = (year: number): number => {
+  year = toInt(year);
   let day = totalDaysBeforeYear[year];
   return day;
 };
@@ -64,6 +69,9 @@ const getTotalDays = (year: number, month: number, day: number): number => {
  * @returns 날짜가 범위 내에 있으면 true
  */
 const isDateInRange = (year: number, month: number, day: number): boolean => {
+  year = toInt(year);
+  month = toInt(month);
+  day = toInt(day);
   const value = year * 10000 + month * 100 + day;
   return value >= BASE_VALUE && value <= MAX_VALUE;
 };
@@ -73,6 +81,9 @@ const isDateInRange = (year: number, month: number, day: number): boolean => {
  * @returns 유효한 날짜이면 true
  */
 const isValidDate = (year: number, month: number, day: number): boolean => {
+  year = toInt(year);
+  month = toInt(month);
+  day = toInt(day);
   if (year < BASE_YEAR || year > MAX_YEAR) return false;
 
   if (year === BASE_YEAR) {
