@@ -26,7 +26,7 @@ const isLeapYear = (year: number): boolean => {
 
 const getMonthDays = (year: number, month: number): number => {
   month = toInt(month);
-  let day = month == 2 && isLeapYear(year) ? LEAP_FEBRUARY_DAY : MONTH_DAYS[month - 1];
+  let day = month === 2 && isLeapYear(year) ? LEAP_FEBRUARY_DAY : MONTH_DAYS[month - 1];
   return day;
 };
 
