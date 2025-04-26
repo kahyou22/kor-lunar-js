@@ -23,6 +23,14 @@ export interface SolarDate {
   day: number;
 }
 
+/**
+ * 양력을 음력으로 변환합니다.
+ * 양력 지원 날짜 범위: 1890년 1월 21일 ~ 2050년 1월 22일
+ * @param solYear 양력 연도
+ * @param solMonth 양력 월
+ * @param solDay 양력 일
+ * @returns 음력 날짜
+ */
 export const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate => {
   solYear = toInt(solYear);
   solMonth = toInt(solMonth);
@@ -86,6 +94,15 @@ export const toLunar = (solYear: number, solMonth: number, solDay: number): Luna
   };
 };
 
+/**
+ * 음력을 양력으로 변환합니다.
+ * 음력 지원 날짜 범위: 1890년 1월 1일 ~ 2049년 12월 29일
+ * @param lunYear 음력 연도
+ * @param lunMonth 음력 월
+ * @param lunDay 음력 일
+ * @param isLeapMonth 음력 윤달 여부, 윤달이면 true
+ * @returns 양력 날짜
+ */
 export const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLeapMonth: boolean): SolarDate => {
   lunYear = toInt(lunYear);
   lunMonth = toInt(lunMonth);
