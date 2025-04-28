@@ -40,45 +40,40 @@ export const toLunar = (solYear: number, solMonth: number, solDay: number): Luna
     throw new RangeError(`지원되지 않는 날짜입니다. 입력한 날짜: ${solYear}-${solMonth}-${solDay}`);
   }
 
-  let year = LunarData.BASE_YEAR;
-  let month = LunarData.BASE_MONTH;
-  let day = LunarData.BASE_DAY + SolarData.getTotalDays(solYear, solMonth, solDay) - SOLAR_LUNAR_DAY_DIFF - 1;
+  let year = Math.min(solYear, LunarData.MAX_YEAR);
+  let month = solYear > LunarData.MAX_YEAR ? LunarData.MAX_MONTH : solMonth;
+  let day = 1;
 
-  let julianDay = JULIAN_DAY_DIFF + day - 1;
-  let dayOfWeek = (day + 1) % 7;
+  const lunTotalDays = LunarData.getTotalDays(year, month, day, true);
+  const solTotalDays = SolarData.getTotalDays(solYear, solMonth, solDay);
 
-  let yearDays = LunarData.getYearDays(year);
+  const diffDays = solTotalDays - SOLAR_LUNAR_DAY_DIFF - lunTotalDays;
+  day += diffDays;
 
-  while (day > yearDays) {
-    year++;
-    day -= yearDays;
-    yearDays = LunarData.getYearDays(year);
-  }
+  let day2 = solTotalDays - SOLAR_LUNAR_DAY_DIFF;
 
-  let isLeapMonth = false;
-  let leapMonth = LunarData.getLeapMonth(year);
-  let monthDays = LunarData.getMonthDays(year, month);
+  let julianDay = JULIAN_DAY_DIFF + day2 - 1;
+  let dayOfWeek = (day2 + 1) % 7;
 
-  while (day > monthDays) {
-    day -= monthDays;
-    isLeapMonth = false;
+  let isLeapMonth = month === LunarData.getLeapMonth(year);
+  let monthDays;
 
-    if (month === leapMonth) {
-      leapMonth = 0;
-      monthDays = LunarData.getLeapMonthDays(year, month);
-      isLeapMonth = true;
-      continue;
+  while (day < 1) {
+    if (isLeapMonth) {
+      isLeapMonth = false;
+    } else {
+      month--;
+
+      if (month === 0) {
+        month = 12;
+        year--;
+      }
+
+      isLeapMonth = month === LunarData.getLeapMonth(year);
     }
 
-    month++;
-
-    if (month > 12) {
-      month = 1;
-      year++;
-      leapMonth = LunarData.getLeapMonth(year);
-    }
-
-    monthDays = LunarData.getMonthDays(year, month);
+    monthDays = isLeapMonth ? LunarData.getLeapMonthDays(year, month) : LunarData.getMonthDays(year, month);
+    day += monthDays;
   }
 
   return {
@@ -112,17 +107,14 @@ export const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLea
     throw new RangeError(`지원되지 않는 날짜입니다. 입력한 날짜: ${lunYear}-${lunMonth}-${lunDay}`);
   }
 
-  let year = SolarData.BASE_YEAR;
-  let month = SolarData.BASE_MONTH;
-  let day = SolarData.BASE_DAY + LunarData.getTotalDays(lunYear, lunMonth, lunDay, isLeapMonth) - 1;
+  const lunTotalDays = LunarData.getTotalDays(lunYear, lunMonth, lunDay, isLeapMonth);
+  const solTotalDays = SolarData.getTotalDays(lunYear, lunMonth, lunDay);
 
-  let yearDays = SolarData.getYearDays(year);
+  const diffDays = lunTotalDays - (solTotalDays - SOLAR_LUNAR_DAY_DIFF);
 
-  while (day > yearDays) {
-    day -= yearDays;
-    year++;
-    yearDays = SolarData.getYearDays(year);
-  }
+  let year = lunYear;
+  let month = lunMonth;
+  let day = lunDay + diffDays;
 
   let monthDays = SolarData.getMonthDays(year, month);
 
