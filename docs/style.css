@@ -79,7 +79,7 @@ main {
 }
 
 .card-container .tabs input[type="radio"]:checked + label {
-  border-bottom: 2px solid #222;
+  border-bottom: 2px solid var(--btn-color);
 }
 
 .card-container .tabs input[type="radio"]:not(:checked) + label:hover {
