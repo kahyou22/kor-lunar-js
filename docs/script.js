@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return month - 1;
   };
 
-  const getMonthData = (year, monthIndex) => {
+  const getMonth = (year, monthIndex) => {
     const hasLeapMonth = korLunar.LunarData.hasLeapMonth(year);
     const leapMonth = korLunar.LunarData.getLeapMonth(year);
     let isLeapMonth = false;
@@ -91,16 +91,24 @@ document.addEventListener("DOMContentLoaded", () => {
         monthIndex--;
       }
     }
-    monthIndex++;
-    let startDays = korLunar.LunarData.getTotalDays(year, monthIndex, 1, isLeapMonth);
+    return {
+      month: monthIndex + 1,
+      isLeapMonth,
+    };
+  };
+
+  const getMonthData = (year, monthIndex) => {
+    const { month, isLeapMonth } = getMonth(year, monthIndex);
+
+    let startDays = korLunar.LunarData.getTotalDays(year, month, 1, isLeapMonth);
     let endDay;
     if (!isLeapMonth) {
-      endDay = korLunar.LunarData.getMonthDays(year, monthIndex);
+      endDay = korLunar.LunarData.getMonthDays(year, month);
     } else {
-      endDay = korLunar.LunarData.getLeapMonthDays(year, monthIndex);
+      endDay = korLunar.LunarData.getLeapMonthDays(year, month);
     }
     return {
-      month: monthIndex,
+      month,
       isLeapMonth,
       startDayOfWeekIndex: (startDays + 1) % 7,
       endDay,
