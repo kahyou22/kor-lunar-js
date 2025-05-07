@@ -136,6 +136,13 @@ document.addEventListener("DOMContentLoaded", () => {
       cell.textContent = d;
       container.appendChild(cell);
     }
+    // 빈 칸
+    const remaining = 42 - data.startDayOfWeekIndex - data.endDay;
+    for (let i = 0; i < remaining; i++) {
+      const empty = document.createElement("div");
+      empty.className = "day";
+      container.appendChild(empty);
+    }
   }
 
   function changeMonth(offset) {
