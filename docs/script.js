@@ -69,6 +69,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
+  const getMonthIndex = (year, month, isLeapMonth) => {
+    if (korLunar.LunarData.hasLeapMonth(year)) {
+      const leapMonth = korLunar.LunarData.getLeapMonth(year);
+      if ((isLeapMonth && month === leapMonth) || month > leapMonth) {
+        month++;
+      }
+    }
+    return month - 1;
+  };
+
   const getMonthData = (year, monthIndex) => {
     const hasLeapMonth = korLunar.LunarData.hasLeapMonth(year);
     const leapMonth = korLunar.LunarData.getLeapMonth(year);
@@ -102,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let lunarToday = korLunar.toLunar(today.getFullYear(), today.getMonth() + 1, today.getDate());
 
   let currentYear = lunarToday.year;
-  let currentMonthIndex = lunarToday.month - 1;
+  let currentMonthIndex = getMonthIndex(currentYear, lunarToday.month, lunarToday.isLeapMonth);
 
   function updateLabel() {
     const data = getMonthData(currentYear, currentMonthIndex);
