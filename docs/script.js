@@ -151,6 +151,14 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let d = 1; d <= data.endDay; d++) {
       const cell = document.createElement("div");
       cell.className = "day";
+      if (
+        currentYear === lunarToday.year &&
+        data.month === lunarToday.month &&
+        d === lunarToday.day &&
+        data.isLeapMonth === lunarToday.isLeapMonth
+      ) {
+        cell.classList.add("today");
+      }
       cell.textContent = d;
       container.appendChild(cell);
     }

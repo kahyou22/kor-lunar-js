@@ -194,8 +194,8 @@ main {
 }
 
 .calendar .today {
-  background-color: var(--btn-color);
-  color: var(--btn-text-color);
+  background-color: #ddd;
   border-radius: var(--radius);
   font-weight: bold;
+  margin: 0px 4px;
 }
