@@ -179,6 +179,16 @@ main {
   background-color: #f4f4f4;
 }
 
+.calendar .header:nth-child(1) {
+  border-top-left-radius: var(--radius);
+  border-bottom-left-radius: var(--radius);
+}
+
+.calendar .header:nth-child(7) {
+  border-top-right-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+}
+
 .calendar .today {
   background-color: var(--btn-color);
   color: var(--btn-text-color);
