@@ -29,6 +29,7 @@ const LUN_TABLE = [
   /*2020*/ 0x3004a9d, 0x2c40556, 0x2c60ab5, 0x3002ad6, 0x2c406d2, 0x3006765, 0x2c60ea5, 0x2c40e4a, 0x2fe5656, 0x2c60c9b,
   /*2030*/ 0x2c4055a, 0x300356d, 0x2c60b69, 0x300bf52, 0x2c40752, 0x2c40b25, 0x3016b0b, 0x2c40a4b, 0x2c404ab, 0x30052bb,
   /*2040*/ 0x2c6056d, 0x2c60b69, 0x3002daa, 0x2c40d92, 0x3007ea5, 0x2c40d25, 0x2c40a4d, 0x3015a4d, 0x2c402b6, 0x2c605b5,
+  /*2050*/ 0x00136d1 /* 11월 18일 까지라 데이터 부족 */,
 ];
 
 const gan = ["갑", "을", "병", "정", "무", "기", "경", "신", "임", "계"];
@@ -39,9 +40,9 @@ export const BASE_MONTH = 1;
 export const BASE_DAY = 1;
 export const BASE_VALUE = BASE_YEAR * 10000 + BASE_MONTH * 100 + BASE_DAY;
 
-export const MAX_YEAR = 2049;
-export const MAX_MONTH = 12;
-export const MAX_DAY = 29;
+export const MAX_YEAR = 2050;
+export const MAX_MONTH = 11;
+export const MAX_DAY = 18;
 export const MAX_VALUE = MAX_YEAR * 10000 + MAX_MONTH * 100 + MAX_DAY;
 
 const SMALL_MONTH_DAY = 29;

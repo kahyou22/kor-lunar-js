@@ -13,8 +13,8 @@ export const BASE_DAY = 21;
 export const BASE_VALUE = BASE_YEAR * 10000 + BASE_MONTH * 100 + BASE_DAY;
 
 export const MAX_YEAR = 2050;
-export const MAX_MONTH = 1;
-export const MAX_DAY = 22;
+export const MAX_MONTH = 12;
+export const MAX_DAY = 31;
 export const MAX_VALUE = MAX_YEAR * 10000 + MAX_MONTH * 100 + MAX_DAY;
 
 const totalDaysBeforeYear: Record<number, number> = {};
