@@ -48,6 +48,9 @@ main {
 }
 
 .card-container .title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 1rem;

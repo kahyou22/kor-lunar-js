@@ -117,10 +117,17 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   let today = new Date();
-  let lunarToday = korLunar.toLunar(today.getFullYear(), today.getMonth() + 1, today.getDate());
+  let lunarToday;
 
-  let currentYear = lunarToday.year;
-  let currentMonthIndex = getMonthIndex(currentYear, lunarToday.month, lunarToday.isLeapMonth);
+  let currentYear;
+  let currentMonthIndex;
+
+  function init() {
+    lunarToday = korLunar.toLunar(today.getFullYear(), today.getMonth() + 1, today.getDate());
+
+    currentYear = lunarToday.year;
+    currentMonthIndex = getMonthIndex(currentYear, lunarToday.month, lunarToday.isLeapMonth);
+  }
 
   function updateLabel() {
     const data = getMonthData(currentYear, currentMonthIndex);
@@ -189,10 +196,16 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCalendar();
   }
 
+  document.getElementById("today").addEventListener("click", reset);
   document.getElementById("prev").addEventListener("click", () => changeMonth(-1));
   document.getElementById("next").addEventListener("click", () => changeMonth(1));
 
+  function reset() {
+    init();
+    updateLabel();
+    renderCalendar();
+  }
+
   // 초기 렌더링
-  updateLabel();
-  renderCalendar();
+  reset();
 });
