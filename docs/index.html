@@ -53,16 +53,24 @@
       <div id="lunarCalendar" class="card-container">
         <div class="title">
           <span>음력 달력 (윤달 포함)</span>
-          <button class="btn" id="today">오늘</button>
+          <button class="btn outline" id="today">오늘</button>
         </div>
         <div class="controls">
-          <button class="btn" id="prev">이전</button>
+          <button class="btn outline sm icon" id="prev">
+            <i data-lucide="chevron-left"></i>
+          </button>
           <span id="month-label"></span>
-          <button class="btn" id="next">다음</button>
+          <button class="btn outline sm icon" id="next">
+            <i data-lucide="chevron-right"></i>
+          </button>
         </div>
         <div class="calendar"></div>
       </div>
     </main>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/kor-lunar@latest/dist/kor-lunar.min.js"></script>
     <script src="./script.js"></script>
   </body>

@@ -136,7 +136,11 @@ main {
 }
 
 .btn {
-  padding: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  padding-inline: 1.25rem;
   font-size: 16px;
   color: var(--btn-text-color);
   background-color: var(--btn-color);
@@ -148,8 +152,33 @@ main {
   user-select: none;
 }
 
+.btn.outline {
+  background-color: #fff;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.btn.outline:hover {
+  background-color: #f4f4f4;
+}
+
 .btn:hover {
   opacity: 0.8;
+}
+
+.btn.sm {
+  height: 2rem;
+  padding-inline: 0.75rem;
+}
+
+.btn.icon {
+  aspect-ratio: 1 / 1;
+  padding-inline: 0;
+}
+
+.btn > svg {
+  aspect-ratio: 1 / 1;
+  height: 1.25rem;
 }
 
 .code {
