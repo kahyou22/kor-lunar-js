@@ -242,3 +242,43 @@ export const isValidDate = (year: number, month: number, day: number, isLeapMont
   const endDay = isLeapMonth ? getLeapMonthDays(year, month) : getMonthDays(year, month);
   return day <= endDay;
 };
+
+/**
+ * 해당 월의 0-based 연속적인 월 인덱스를 반환합니다.
+ * @param year 1890년 ~ 2050년
+ * @param month 1월 ~ 12월
+ * @param isLeapMonth 대상이 윤달이면 true
+ * @returns 윤달이 있는 해는 0~12 (13개월), 없는 해는 0~11 (12개월)
+ */
+export const getMonthIndex = (year: number, month: number, isLeapMonth: boolean): number => {
+  month = toInt(month);
+  let index = month;
+  if (hasLeapMonth(year)) {
+    const leapMonth = getLeapMonth(year);
+    if ((isLeapMonth && month === leapMonth) || month > leapMonth) {
+      index++;
+    }
+  }
+  return index - 1;
+};
+
+/**
+ * 0-based 연속적인 월 인덱스에 해당하는 월과 윤달 여부를 반환합니다.
+ * @param year 1890년 ~ 2050년
+ * @param monthIndex 윤달이 있는 해는 0~12 (13개월), 없는 해는 0~11 (12개월)
+ * @returns month (1~12)와 isLeapMonth 여부
+ */
+export const getMonthFromIndex = (year: number, monthIndex: number): { month: number; isLeapMonth: boolean } => {
+  const leapMonth = getLeapMonth(year);
+  let isLeapMonth = false;
+  let index = monthIndex;
+  if (leapMonth > 0) {
+    if (index === leapMonth) {
+      isLeapMonth = true;
+    }
+    if (index >= leapMonth) {
+      index--;
+    }
+  }
+  return { month: index + 1, isLeapMonth };
+};
