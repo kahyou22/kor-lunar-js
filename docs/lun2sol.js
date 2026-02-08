@@ -1,6 +1,47 @@
 (() => {
   const container = document.querySelector("#lunarSolar");
-  const output = container.querySelector(".code");
+  const output = container.querySelector(".code.result");
+  const exampleCode = container.querySelector(".example-code code");
+
+  const DEFAULT_DATE = { year: 2025, month: 6, day: 1 };
+
+  const toNumberOrDefault = (value, fallback) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+  };
+
+  const getInputDate = () => ({
+    year: toNumberOrDefault(container.querySelector("#lunYear").value, DEFAULT_DATE.year),
+    month: toNumberOrDefault(container.querySelector("#lunMonth").value, DEFAULT_DATE.month),
+    day: toNumberOrDefault(container.querySelector("#sonDay").value, DEFAULT_DATE.day),
+  });
+
+  const renderExampleCode = () => {
+    const { year, month, day } = getInputDate();
+    const leapMode = container.querySelector('input[name="leap"]:checked').value;
+
+    if (leapMode === "normal") {
+      exampleCode.textContent = `// 음력 → 양력 변환 (평달)
+const solar = korLunar.toSolar(${year}, ${month}, ${day}, false);
+console.log(solar);`;
+    } else if (leapMode === "leap") {
+      exampleCode.textContent = `// 음력 → 양력 변환 (윤달)
+const solar = korLunar.toSolar(${year}, ${month}, ${day}, true);
+console.log(solar);`;
+    } else {
+      exampleCode.textContent = `// 음력 → 양력 변환 (평달)
+const solar = korLunar.toSolar(${year}, ${month}, ${day}, false);
+console.log(solar);
+
+// 음력 → 양력 변환 (윤달)
+const solarLeap = korLunar.toSolar(${year}, ${month}, ${day}, true);
+console.log(solarLeap);`;
+    }
+
+    if (window.Prism) {
+      Prism.highlightElement(exampleCode);
+    }
+  };
 
   container.querySelector(".btn").addEventListener("click", () => {
     const y = container.querySelector("#lunYear").value;
@@ -30,4 +71,11 @@
       output.textContent = error.message;
     }
   });
+
+  container.querySelectorAll("#lunYear, #lunMonth, #sonDay, input[name='leap']").forEach((input) => {
+    input.addEventListener("input", renderExampleCode);
+    input.addEventListener("change", renderExampleCode);
+  });
+
+  renderExampleCode();
 })();

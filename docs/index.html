@@ -4,17 +4,66 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29/themes/prism.min.css" />
     <title>양력/음력 변환기</title>
   </head>
   <body>
     <main>
-      <div class="card-container">
-        <span>1. <a href="#solarLunar">양력 → 음력</a></span>
-        <span>2. <a href="#lunarSolar">음력 → 양력</a></span>
-        <span>3. <a href="#lunarCalendar">음력 달력</a></span>
-      </div>
+      <nav class="menu-grid" aria-label="섹션 이동 및 외부 링크">
+        <a class="menu-link" href="#solarLunar">
+          <span class="menu-title">
+            <i data-lucide="sun"></i>
+            양력 → 음력
+          </span>
+          <span class="menu-desc">양력 날짜를 음력으로 변환</span>
+        </a>
+        <a class="menu-link" href="#lunarSolar">
+          <span class="menu-title">
+            <i data-lucide="moon"></i>
+            음력 → 양력
+          </span>
+          <span class="menu-desc">음력 날짜를 양력으로 변환</span>
+        </a>
+        <a class="menu-link" href="#lunarCalendar">
+          <span class="menu-title">
+            <i data-lucide="calendar-days"></i>
+            음력 달력
+          </span>
+          <span class="menu-desc">윤달 포함 월별 확인</span>
+        </a>
+        <a
+          class="menu-link external"
+          href="https://www.npmjs.com/package/kor-lunar"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="menu-title">
+            <i data-lucide="package"></i>
+            npm
+          </span>
+          <span class="menu-desc">패키지 설치/버전 확인</span>
+        </a>
+        <a
+          class="menu-link external"
+          href="https://github.com/kahyou22/kor-lunar-js"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="menu-title">
+            <i data-lucide="github"></i>
+            GitHub
+          </span>
+          <span class="menu-desc">소스 코드와 이슈 확인</span>
+        </a>
+      </nav>
       <div id="solarLunar" class="card-container">
         <div class="title">양력 → 음력</div>
+        <div class="example-code">
+          <div class="code-label">예제 코드</div>
+          <pre><code class="language-js">// 양력 → 음력 변환
+const lunar = korLunar.toLunar(2025, 6, 25);
+console.log(lunar);</code></pre>
+        </div>
         <div class="tabs">
           <input type="radio" id="tab1" name="sol-type" value="date" checked />
           <label for="tab1">달력</label>
@@ -30,10 +79,21 @@
           </div>
         </div>
         <button class="btn">변환</button>
-        <pre class="code"></pre>
+        <div class="code-label">결과</div>
+        <pre class="code result"></pre>
       </div>
       <div id="lunarSolar" class="card-container">
         <div class="title">음력 → 양력</div>
+        <div class="example-code">
+          <div class="code-label">예제 코드</div>
+          <pre><code class="language-js">// 음력 → 양력 변환 (평달)
+const solar = korLunar.toSolar(2025, 6, 1, false);
+console.log(solar);
+
+// 음력 → 양력 변환 (윤달)
+const solarLeap = korLunar.toSolar(2025, 6, 1, true);
+console.log(solarLeap);</code></pre>
+        </div>
         <div class="fields">
           <input type="number" min="1890" max="2050" placeholder="년" id="lunYear" />
           <input type="number" min="1" max="12" placeholder="월" id="lunMonth" />
@@ -48,7 +108,8 @@
           <label for="all">모름</label>
         </div>
         <button class="btn">변환</button>
-        <pre class="code"></pre>
+        <div class="code-label">결과</div>
+        <pre class="code result"></pre>
       </div>
       <div id="lunarCalendar" class="card-container">
         <div class="title">
@@ -72,6 +133,8 @@
       lucide.createIcons();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/kor-lunar@latest/dist/kor-lunar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29/components/prism-javascript.min.js"></script>
     <!-- <script src="./script.js"></script> -->
     <script src="./calendar.js"></script>
     <script src="./sol2lun.js"></script>
