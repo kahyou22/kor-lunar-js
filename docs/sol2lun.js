@@ -1,6 +1,6 @@
 (() => {
   const container = document.querySelector("#solarLunar");
-  const output = container.querySelector(".code.result");
+  const output = container.querySelector(".code.result code");
   const exampleCode = container.querySelector(".example-code code");
 
   const DEFAULT_DATE = { year: 2025, month: 6, day: 25 };
@@ -43,6 +43,14 @@ console.log(lunar);`;
     }
   };
 
+  const renderResultCode = (value, language = "json") => {
+    output.className = `language-${language}`;
+    output.textContent = value;
+    if (window.Prism) {
+      Prism.highlightElement(output);
+    }
+  };
+
   container.querySelector(".btn").addEventListener("click", () => {
     // 탭에 따라 입력 형태 결정
     const mode = container.querySelector('input[name="sol-type"]:checked').value;
@@ -69,9 +77,9 @@ console.log(lunar);`;
 
     try {
       const lunar = korLunar.toLunar(y, m, d);
-      output.textContent = JSON.stringify(lunar, null, 2);
+      renderResultCode(JSON.stringify(lunar, null, 2), "json");
     } catch (error) {
-      output.textContent = error.message;
+      renderResultCode(error.message, "none");
     }
   });
 

@@ -1,6 +1,6 @@
 (() => {
   const container = document.querySelector("#lunarSolar");
-  const output = container.querySelector(".code.result");
+  const output = container.querySelector(".code.result code");
   const exampleCode = container.querySelector(".example-code code");
 
   const DEFAULT_DATE = { year: 2025, month: 6, day: 1 };
@@ -43,6 +43,14 @@ console.log(solarLeap);`;
     }
   };
 
+  const renderResultCode = (value, language = "json") => {
+    output.className = `language-${language}`;
+    output.textContent = value;
+    if (window.Prism) {
+      Prism.highlightElement(output);
+    }
+  };
+
   container.querySelector(".btn").addEventListener("click", () => {
     const y = container.querySelector("#lunYear").value;
     const m = container.querySelector("#lunMonth").value;
@@ -57,18 +65,18 @@ console.log(solarLeap);`;
     try {
       if (leapMode === "normal") {
         const solar = korLunar.toSolar(y, m, d, false);
-        output.textContent = JSON.stringify(solar, null, 2);
+        renderResultCode(JSON.stringify(solar, null, 2), "json");
       }
       if (leapMode === "leap") {
         const solar = korLunar.toSolar(y, m, d, true);
-        output.textContent = JSON.stringify(solar, null, 2);
+        renderResultCode(JSON.stringify(solar, null, 2), "json");
       }
       if (leapMode === "all") {
         const solar = [korLunar.toSolar(y, m, d, false), korLunar.toSolar(y, m, d, true)];
-        output.textContent = JSON.stringify(solar, null, 2);
+        renderResultCode(JSON.stringify(solar, null, 2), "json");
       }
     } catch (error) {
-      output.textContent = error.message;
+      renderResultCode(error.message, "none");
     }
   });
 
