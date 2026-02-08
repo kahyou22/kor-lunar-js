@@ -12,11 +12,10 @@ const readmePath = path.resolve(process.cwd(), "README.md");
 const readme = readFileSync(readmePath, "utf-8");
 
 // 기존 CDN URL(/kor-lunar@버전/ 이 없는 경우) 또는 이전 버전 치환
-const updated = readme.replace(
-  /cdn\.jsdelivr\.net\/npm\/kor-lunar(?:@[0-9]+\.[0-9]+\.[0-9]+)?\/dist/g,
-  `cdn.jsdelivr.net/npm/kor-lunar@${shortVersion}/dist`
-);
+const cdnPattern = /cdn\.jsdelivr\.net\/npm\/kor-lunar(?:@[^/]+)?\/dist/g;
+const matches = readme.match(cdnPattern) ?? [];
+const updated = readme.replace(cdnPattern, `cdn.jsdelivr.net/npm/kor-lunar@${shortVersion}/dist`);
 
 // 덮어쓰기
 writeFileSync(readmePath, updated, "utf-8");
-console.log(`README.md CDN URL 업데이트 @${shortVersion}`);
+console.log(`README.md CDN URL 업데이트 @${shortVersion} (치환 ${matches.length}건)`);
