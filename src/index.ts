@@ -1,5 +1,5 @@
-import { toLunar, toSolar, LunarData, SolarData, LunarDate, SolarDate } from "./kor-lunar";
+import { toLunar, toSolar, LunarTable, SolarTable, LunarData, SolarData, LunarDate, SolarDate } from "./kor-lunar";
 
-const korLunar = { toLunar, toSolar, LunarData, SolarData };
+const korLunar = { toLunar, toSolar, LunarTable, SolarTable, LunarData, SolarData };
 export default korLunar;
-export { toLunar, toSolar, LunarData, SolarData, LunarDate, SolarDate };
+export { toLunar, toSolar, LunarTable, SolarTable, LunarData, SolarData, LunarDate, SolarDate };

@@ -1,5 +1,5 @@
-import * as LunarData from "./lunar-data";
-import * as SolarData from "./solar-data";
+import * as LunarTable from "./lunar-table";
+import * as SolarTable from "./solar-table";
 import { toInt } from "./utils";
 
 const SOLAR_LUNAR_DAY_DIFF = 20;
@@ -36,16 +36,16 @@ export const toLunar = (solYear: number, solMonth: number, solDay: number): Luna
   solMonth = toInt(solMonth);
   solDay = toInt(solDay);
 
-  if (!SolarData.isDateInRange(solYear, solMonth, solDay)) {
+  if (!SolarTable.isDateInRange(solYear, solMonth, solDay)) {
     throw new RangeError(`지원되지 않는 날짜입니다. 입력한 날짜: ${solYear}-${solMonth}-${solDay}`);
   }
 
-  let year = Math.min(solYear, LunarData.MAX_YEAR);
-  let month = solYear > LunarData.MAX_YEAR ? LunarData.MAX_MONTH : solMonth;
+  let year = Math.min(solYear, LunarTable.MAX_YEAR);
+  let month = solYear > LunarTable.MAX_YEAR ? LunarTable.MAX_MONTH : solMonth;
   let day = 1;
 
-  const lunTotalDays = LunarData.getTotalDays(year, month, day, true);
-  const solTotalDays = SolarData.getTotalDays(solYear, solMonth, solDay);
+  const lunTotalDays = LunarTable.getTotalDays(year, month, day, true);
+  const solTotalDays = SolarTable.getTotalDays(solYear, solMonth, solDay);
 
   const diffDays = solTotalDays - SOLAR_LUNAR_DAY_DIFF - lunTotalDays;
   day += diffDays;
@@ -55,7 +55,7 @@ export const toLunar = (solYear: number, solMonth: number, solDay: number): Luna
   let julianDay = JULIAN_DAY_DIFF + day2 - 1;
   let dayOfWeek = (day2 + 1) % 7;
 
-  let isLeapMonth = month === LunarData.getLeapMonth(year);
+  let isLeapMonth = month === LunarTable.getLeapMonth(year);
   let monthDays;
 
   while (day < 1) {
@@ -69,10 +69,10 @@ export const toLunar = (solYear: number, solMonth: number, solDay: number): Luna
         year--;
       }
 
-      isLeapMonth = month === LunarData.getLeapMonth(year);
+      isLeapMonth = month === LunarTable.getLeapMonth(year);
     }
 
-    monthDays = isLeapMonth ? LunarData.getLeapMonthDays(year, month) : LunarData.getMonthDays(year, month);
+    monthDays = isLeapMonth ? LunarTable.getLeapMonthDays(year, month) : LunarTable.getMonthDays(year, month);
     day += monthDays;
   }
 
@@ -81,9 +81,9 @@ export const toLunar = (solYear: number, solMonth: number, solDay: number): Luna
     month,
     day,
     isLeapMonth,
-    secha: LunarData.getSecha(year),
-    wolgeon: isLeapMonth ? "" : LunarData.getWolgeon(year, month),
-    iljin: LunarData.getIljinByJulianDay(julianDay),
+    secha: LunarTable.getSecha(year),
+    wolgeon: isLeapMonth ? "" : LunarTable.getWolgeon(year, month),
+    iljin: LunarTable.getIljinByJulianDay(julianDay),
     julianDay,
     dayOfWeek,
   };
@@ -103,12 +103,12 @@ export const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLea
   lunMonth = toInt(lunMonth);
   lunDay = toInt(lunDay);
 
-  if (!LunarData.isDateInRange(lunYear, lunMonth, lunDay)) {
+  if (!LunarTable.isDateInRange(lunYear, lunMonth, lunDay)) {
     throw new RangeError(`지원되지 않는 날짜입니다. 입력한 날짜: ${lunYear}-${lunMonth}-${lunDay}`);
   }
 
-  const lunTotalDays = LunarData.getTotalDays(lunYear, lunMonth, lunDay, isLeapMonth);
-  const solTotalDays = SolarData.getTotalDays(lunYear, lunMonth, lunDay);
+  const lunTotalDays = LunarTable.getTotalDays(lunYear, lunMonth, lunDay, isLeapMonth);
+  const solTotalDays = SolarTable.getTotalDays(lunYear, lunMonth, lunDay);
 
   const diffDays = lunTotalDays - (solTotalDays - SOLAR_LUNAR_DAY_DIFF);
 
@@ -116,7 +116,7 @@ export const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLea
   let month = lunMonth;
   let day = lunDay + diffDays;
 
-  let monthDays = SolarData.getMonthDays(year, month);
+  let monthDays = SolarTable.getMonthDays(year, month);
 
   while (day > monthDays) {
     day -= monthDays;
@@ -127,11 +127,15 @@ export const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLea
       year++;
     }
 
-    monthDays = SolarData.getMonthDays(year, month);
+    monthDays = SolarTable.getMonthDays(year, month);
   }
 
   return { year, month, day };
 };
 
-export * as LunarData from "./lunar-data";
-export * as SolarData from "./solar-data";
+export { LunarTable, SolarTable };
+
+/** @deprecated `LunarData`는 `LunarTable`로 이름이 변경되었습니다. */
+export const LunarData = LunarTable;
+/** @deprecated `SolarData`는 `SolarTable`로 이름이 변경되었습니다. */
+export const SolarData = SolarTable;
