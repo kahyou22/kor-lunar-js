@@ -1,6 +1,7 @@
 # kor-lunar
 
-이 라이브러리는 학습용으로 제작되었으며, 한국천문연구원(KASI)의 음력·양력 데이터를 기반으로 한 자바스크립트 라이브러리입니다. 오프라인 환경에서도 사용할 수 있도록 구현되었습니다.
+이 라이브러리는 학습용으로 제작되었으며, 한국천문연구원(KASI)의 음력·양력 변환 데이터를 기반으로 한 자바스크립트 라이브러리입니다.  
+네트워크 요청 없이 **오프라인에서도 동작**하고, 별도의 외부 의존성이 없습니다.
 
 > **⚠️ 주의:** 데이터는 **2025년 5월 20일 기준**으로 갱신되었습니다.  
 > 이후의 중요한 변경 사항이 반영되지 않을 수 있으므로,  
@@ -8,11 +9,13 @@
 
 ## 특징
 
-- **음력 ↔ 양력 변환** 지원
-- **윤달 처리** 가능 (`isLeapMonth` 옵션)
-- **음력 간지 출력**: 세차(`secha`), 월건(`wolgeon`), 일진(`iljin`) 포함
+- **음력 ↔ 양력 변환** - `toLunar`, `toSolar`
+- **윤달 처리** - `isLeapMonth` 옵션
+- **음력 간지 출력** - 세차(`secha`), 월건(`wolgeon`), 일진(`iljin`)
   - 윤달인 경우 `wolgeon`은 빈 문자열로 반환됩니다
-- **오프라인** 환경에서도 사용 가능
+- **TypeScript 지원** - 타입 정의 기본 제공
+- **Zero Dependencies** - 외부 의존성 없음
+- **CJS / ESM / UMD** — 다양한 환경에서 사용 가능
 
 - [예제 사이트](https://kahyou22.github.io/kor-lunar-js/)
 
@@ -29,6 +32,14 @@ _범위를 벗어난 날짜가 입력될 경우 `RangeError`가 발생하며, �
 npm install kor-lunar
 ```
 
+### 브라우저 CDN
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/kor-lunar@1.4/dist/kor-lunar.min.js"></script>
+```
+
+CDN 사용 시 전역 변수 `korLunar`로 접근할 수 있습니다.
+
 ## 사용법
 
 ### 모듈 불러오기
@@ -39,10 +50,10 @@ import korLunar from "kor-lunar";
 const korLunar = require("kor-lunar");
 ```
 
-### 브라우저 CDN
+Named export도 지원합니다:
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/kor-lunar@1.4/dist/kor-lunar.min.js"></script>
+```js
+import { toLunar, toSolar } from "kor-lunar";
 ```
 
 ## 예제
@@ -66,6 +77,7 @@ console.log(korLunar.toLunar(2025, 6, 25));
 //   dayOfWeek: 3
 // }
 
+// 양력 → 음력 (윤달)
 console.log(korLunar.toLunar(2025, 7, 25));
 // {
 //   year: 2025,
@@ -87,8 +99,8 @@ console.log(korLunar.toSolar(2025, 6, 1, true));
 // { year: 2025, month: 7, day: 25 }
 ```
 
-> 권장되진 않지만, `korLunar.LunarData`나 `korLunar.SolarData` 같은 내부 함수에 직접 접근할 수도 있습니다.  
-> 이를 통해 단순 음력 변환을 넘어, 더 다양한 기능을 구현할 수 있습니다.  
+> 권장되진 않지만, `korLunar.LunarTable`과 `korLunar.SolarTable` 같은 내부 함수에 직접 접근할 수도 있습니다.  
+> 이를 통해 단순 음력 변환 뿐만 아니라, 더 다양한 기능을 구현할 수 있습니다.  
 > [예제 사이트: 음력 달력](https://kahyou22.github.io/kor-lunar-js/#lunarCalendar)
 
 ## 라이선스
