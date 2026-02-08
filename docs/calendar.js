@@ -1,43 +1,15 @@
 (() => {
   const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
-  const getMonthIndex = (year, month, isLeapMonth) => {
-    if (korLunar.LunarData.hasLeapMonth(year)) {
-      const leapMonth = korLunar.LunarData.getLeapMonth(year);
-      if ((isLeapMonth && month === leapMonth) || month > leapMonth) {
-        month++;
-      }
-    }
-    return month - 1;
-  };
-
-  const getMonth = (year, monthIndex) => {
-    const hasLeapMonth = korLunar.LunarData.hasLeapMonth(year);
-    const leapMonth = korLunar.LunarData.getLeapMonth(year);
-    let isLeapMonth = false;
-    if (hasLeapMonth) {
-      if (monthIndex === leapMonth) {
-        isLeapMonth = true;
-      }
-      if (monthIndex >= leapMonth) {
-        monthIndex--;
-      }
-    }
-    return {
-      month: monthIndex + 1,
-      isLeapMonth,
-    };
-  };
-
   const getMonthData = (year, monthIndex) => {
-    const { month, isLeapMonth } = getMonth(year, monthIndex);
+    const { month, isLeapMonth } = korLunar.LunarTable.getMonthFromIndex(year, monthIndex);
 
-    let startDays = korLunar.LunarData.getTotalDays(year, month, 1, isLeapMonth);
+    let startDays = korLunar.LunarTable.getTotalDays(year, month, 1, isLeapMonth);
     let endDay;
     if (!isLeapMonth) {
-      endDay = korLunar.LunarData.getMonthDays(year, month);
+      endDay = korLunar.LunarTable.getMonthDays(year, month);
     } else {
-      endDay = korLunar.LunarData.getLeapMonthDays(year, month);
+      endDay = korLunar.LunarTable.getLeapMonthDays(year, month);
     }
     return {
       month,
@@ -58,7 +30,7 @@
     lunarToday = korLunar.toLunar(today.getFullYear(), today.getMonth() + 1, today.getDate());
 
     currentYear = lunarToday.year;
-    currentMonthIndex = getMonthIndex(currentYear, lunarToday.month, lunarToday.isLeapMonth);
+    currentMonthIndex = korLunar.LunarTable.getMonthIndex(currentYear, lunarToday.month, lunarToday.isLeapMonth);
   }
 
   function updateLabel() {
@@ -112,13 +84,13 @@
 
   function changeMonth(offset) {
     // 현재 연도 윤달 정보
-    const hasLeap = korLunar.LunarData.hasLeapMonth(currentYear);
+    const hasLeap = korLunar.LunarTable.hasLeapMonth(currentYear);
     const totalMonths = hasLeap ? 12 : 11;
 
     currentMonthIndex += offset;
     if (currentMonthIndex < 0) {
       currentYear--;
-      const prevHasLeap = korLunar.LunarData.hasLeapMonth(currentYear);
+      const prevHasLeap = korLunar.LunarTable.hasLeapMonth(currentYear);
       currentMonthIndex = prevHasLeap ? 12 : 11;
     } else if (currentMonthIndex > totalMonths) {
       currentYear++;
