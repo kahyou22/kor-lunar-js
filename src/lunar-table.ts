@@ -146,16 +146,16 @@ export const getTotalDaysBeforeYear = (year: number): number => {
  */
 export const getTotalDaysBeforeMonth = (year: number, month: number, isLeapMonth: boolean): number => {
   month = toInt(month);
+  const leapMonth = getLeapMonth(year);
   let days = 0;
   // 해당 월 전까지 윤달을 포함하여 누적
   for (let m = 1; m < month; m++) {
     days += getMonthDays(year, m);
-    if (m === getLeapMonth(year)) {
+    if (m === leapMonth) {
       days += getLeapMonthDays(year, m);
     }
   }
   // 대상이 윤달이면, 앞에 있는 평달을 누적
-  let leapMonth = getLeapMonth(year);
   if (isLeapMonth && leapMonth === month) {
     days += getMonthDays(year, month);
   }
