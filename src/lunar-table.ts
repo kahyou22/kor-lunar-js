@@ -248,7 +248,7 @@ export const isValidDate = (year: number, month: number, day: number, isLeapMont
  * @param year 1890년 ~ 2050년
  * @param month 1월 ~ 12월
  * @param isLeapMonth 대상이 윤달이면 true
- * @returns 윤달이 있는 해는 0~12 (13개월), 없는 해는 0~11 (12개월)
+ * @returns 윤달이 있는 해는 0 ~ 12 (13개월), 없는 해는 0 ~ 11 (12개월)
  */
 export const getMonthIndex = (year: number, month: number, isLeapMonth: boolean): number => {
   month = toInt(month);
@@ -265,7 +265,7 @@ export const getMonthIndex = (year: number, month: number, isLeapMonth: boolean)
 /**
  * 0-based 연속적인 월 인덱스에 해당하는 월과 윤달 여부를 반환합니다.
  * @param year 1890년 ~ 2050년
- * @param monthIndex 윤달이 있는 해는 0~12 (13개월), 없는 해는 0~11 (12개월)
+ * @param monthIndex 윤달이 있는 해는 0 ~ 12 (13개월), 없는 해는 0 ~ 11 (12개월)
  * @returns month (1~12)와 isLeapMonth 여부
  */
 export const getMonthFromIndex = (year: number, monthIndex: number): { month: number; isLeapMonth: boolean } => {
