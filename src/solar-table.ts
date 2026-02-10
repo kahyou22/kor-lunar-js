@@ -17,7 +17,7 @@ export const MAX_MONTH = 12;
 export const MAX_DAY = 31;
 export const MAX_VALUE = MAX_YEAR * 10000 + MAX_MONTH * 100 + MAX_DAY;
 
-const totalDaysBeforeYear: Record<number, number> = {};
+const totalDaysBeforeYear: number[] = [];
 
 export const isLeapYear = (year: number): boolean => {
   year = toInt(year);
@@ -39,15 +39,15 @@ export const getYearDays = (year: number): number => {
  * 연도별 누적 일 수를 초기에 룩업 테이블로 생성하여
  * O(1)으로 누적 일 수를 가져오게 변환함
  */
-totalDaysBeforeYear[BASE_YEAR] = 0;
+totalDaysBeforeYear[0] = 0;
 for (let y = BASE_YEAR + 1; y <= MAX_YEAR; y++) {
-  totalDaysBeforeYear[y] = totalDaysBeforeYear[y - 1] + getYearDays(y - 1);
+  const idx = y - BASE_YEAR;
+  totalDaysBeforeYear[idx] = totalDaysBeforeYear[idx - 1] + getYearDays(y - 1);
 }
 
 export const getTotalDaysBeforeYear = (year: number): number => {
   year = toInt(year);
-  let day = totalDaysBeforeYear[year];
-  return day;
+  return totalDaysBeforeYear[year - BASE_YEAR];
 };
 
 export const getTotalDaysBeforeMonth = (year: number, month: number): number => {

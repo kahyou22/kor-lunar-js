@@ -48,7 +48,7 @@ export const MAX_VALUE = MAX_YEAR * 10000 + MAX_MONTH * 100 + MAX_DAY;
 const SMALL_MONTH_DAY = 29;
 const BIG_MONTH_DAY = 30;
 
-const totalDaysBeforeYear: Record<number, number> = {};
+const totalDaysBeforeYear: number[] = [];
 
 const getYearData = (year: number): number => {
   year = toInt(year);
@@ -121,9 +121,10 @@ export const getYearDays = (year: number): number => {
  * 연도별 누적 일 수를 초기에 룩업 테이블로 생성하여
  * O(1)으로 누적 일 수를 가져오게 변환함
  */
-totalDaysBeforeYear[BASE_YEAR] = 0;
+totalDaysBeforeYear[0] = 0;
 for (let y = BASE_YEAR + 1; y <= MAX_YEAR; y++) {
-  totalDaysBeforeYear[y] = totalDaysBeforeYear[y - 1] + getYearDays(y - 1);
+  const idx = y - BASE_YEAR;
+  totalDaysBeforeYear[idx] = totalDaysBeforeYear[idx - 1] + getYearDays(y - 1);
 }
 
 /**
@@ -133,8 +134,7 @@ for (let y = BASE_YEAR + 1; y <= MAX_YEAR; y++) {
  */
 export const getTotalDaysBeforeYear = (year: number): number => {
   year = toInt(year);
-  let days = totalDaysBeforeYear[year];
-  return days;
+  return totalDaysBeforeYear[year - BASE_YEAR];
 };
 
 /**
