@@ -1,6 +1,7 @@
 {
   "name": "kor-lunar",
   "version": "1.5.1",
+  "type": "module",
   "description": "한국 음력 변환 유틸 / Korean lunar calendar converter",
   "main": "dist/kor-lunar.js",
   "module": "dist/kor-lunar.esm.js",
