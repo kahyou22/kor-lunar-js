@@ -33,53 +33,40 @@
     currentMonthIndex = korLunar.LunarTable.getMonthIndex(currentYear, lunarToday.month, lunarToday.isLeapMonth);
   }
 
-  function updateLabel() {
+  function render() {
     const data = getMonthData(currentYear, currentMonthIndex);
-    document.getElementById("month-label").textContent = `${currentYear}년 ${data.month}월${
-      data.isLeapMonth ? " (윤달)" : ""
-    }`;
-  }
 
-  function renderCalendar() {
+    // 라벨 갱신
+    document.getElementById("month-label").textContent = `${currentYear}년 ${data.month}월${data.isLeapMonth ? " (윤달)" : ""
+      }`;
+
+    // 달력 렌더링
+    const ROWS = 6;
     const container = document.querySelector("#lunarCalendar .calendar");
-    container.innerHTML = "";
+    let html = "";
     // 요일 헤더
-    weekdays.forEach((day) => {
-      const header = document.createElement("div");
-      header.className = "day header";
-      header.textContent = day;
-      container.appendChild(header);
-    });
-    // 달 데이터
-    const data = getMonthData(currentYear, currentMonthIndex);
+    for (const day of weekdays) {
+      html += `<div class="day header">${day}</div>`;
+    }
     // 빈 칸
     for (let i = 0; i < data.startDayOfWeekIndex; i++) {
-      const empty = document.createElement("div");
-      empty.className = "day";
-      container.appendChild(empty);
+      html += `<div class="day"></div>`;
     }
     // 날짜 칸
     for (let d = 1; d <= data.endDay; d++) {
-      const cell = document.createElement("div");
-      cell.className = "day";
-      if (
+      const isToday =
         currentYear === lunarToday.year &&
         data.month === lunarToday.month &&
         d === lunarToday.day &&
-        data.isLeapMonth === lunarToday.isLeapMonth
-      ) {
-        cell.classList.add("today");
-      }
-      cell.textContent = d;
-      container.appendChild(cell);
+        data.isLeapMonth === lunarToday.isLeapMonth;
+      html += `<div class="day${isToday ? " today" : ""}">${d}</div>`;
     }
     // 빈 칸
-    const remaining = 42 - data.startDayOfWeekIndex - data.endDay;
+    const remaining = ROWS * 7 - data.startDayOfWeekIndex - data.endDay;
     for (let i = 0; i < remaining; i++) {
-      const empty = document.createElement("div");
-      empty.className = "day";
-      container.appendChild(empty);
+      html += `<div class="day"></div>`;
     }
+    container.innerHTML = html;
   }
 
   function changeMonth(offset) {
@@ -96,20 +83,18 @@
       currentYear++;
       currentMonthIndex = 0;
     }
-    updateLabel();
-    renderCalendar();
+    render();
   }
 
-  document.getElementById("today").addEventListener("click", reset);
+  document.getElementById("today").addEventListener("click", () => {
+    init();
+    render();
+  });
   document.getElementById("prev").addEventListener("click", () => changeMonth(-1));
   document.getElementById("next").addEventListener("click", () => changeMonth(1));
 
-  function reset() {
-    init();
-    updateLabel();
-    renderCalendar();
-  }
-
   // 초기 렌더링
-  reset();
+  init();
+  render();
 })();
+

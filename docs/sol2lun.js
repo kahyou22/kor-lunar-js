@@ -5,31 +5,33 @@
 
   const DEFAULT_DATE = { year: 2025, month: 6, day: 25 };
 
-  const toNumberOrDefault = (value, fallback) => {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+  const flash = (el) => {
+    const pre = el.closest("pre");
+    pre.classList.remove("updated");
+    void pre.offsetWidth;
+    pre.classList.add("updated");
   };
 
   const getInputDate = () => {
-    const mode = container.querySelector('input[name="sol-type"]:checked').value;
+    const mode = container.querySelector(`input[name="sol-type"]:checked`).value;
 
     if (mode === "date") {
       const dateStr = container.querySelector("#solDate").value;
       if (dateStr) {
         const [year, month, day] = dateStr.split("-").map(Number);
         return {
-          year: toNumberOrDefault(year, DEFAULT_DATE.year),
-          month: toNumberOrDefault(month, DEFAULT_DATE.month),
-          day: toNumberOrDefault(day, DEFAULT_DATE.day),
+          year: Number(year) || DEFAULT_DATE.year,
+          month: Number(month) || DEFAULT_DATE.month,
+          day: Number(day) || DEFAULT_DATE.day,
         };
       }
       return DEFAULT_DATE;
     }
 
     return {
-      year: toNumberOrDefault(container.querySelector("#solYear").value, DEFAULT_DATE.year),
-      month: toNumberOrDefault(container.querySelector("#solMonth").value, DEFAULT_DATE.month),
-      day: toNumberOrDefault(container.querySelector("#sonDay").value, DEFAULT_DATE.day),
+      year: Number(container.querySelector("#solYear").value) || DEFAULT_DATE.year,
+      month: Number(container.querySelector("#solMonth").value) || DEFAULT_DATE.month,
+      day: Number(container.querySelector("#solDay").value) || DEFAULT_DATE.day,
     };
   };
 
@@ -41,6 +43,7 @@ console.log(lunar);`;
     if (window.Prism) {
       Prism.highlightElement(exampleCode);
     }
+    flash(exampleCode);
   };
 
   const renderResultCode = (value, language = "json") => {
@@ -49,34 +52,14 @@ console.log(lunar);`;
     if (window.Prism) {
       Prism.highlightElement(output);
     }
+    flash(output);
   };
 
   container.querySelector(".btn").addEventListener("click", () => {
-    // 탭에 따라 입력 형태 결정
-    const mode = container.querySelector('input[name="sol-type"]:checked').value;
-
-    let y, m, d;
-
-    if (mode === "date") {
-      const dateStr = container.querySelector("#solDate").value;
-      if (!dateStr) {
-        alert("날짜를 선택해주세요.");
-        return;
-      }
-      [y, m, d] = dateStr.split("-");
-    } else {
-      y = container.querySelector("#solYear").value;
-      m = container.querySelector("#solMonth").value;
-      d = container.querySelector("#sonDay").value;
-    }
-
-    if (!Number(y) || !Number(m) || !Number(d)) {
-      alert("년·월·일을 모두 입력해주세요.");
-      return;
-    }
+    const { year, month, day } = getInputDate();
 
     try {
-      const lunar = korLunar.toLunar(y, m, d);
+      const lunar = korLunar.toLunar(year, month, day);
       renderResultCode(JSON.stringify(lunar, null, 2), "json");
     } catch (error) {
       renderResultCode(error.message, "none");
@@ -84,11 +67,16 @@ console.log(lunar);`;
   });
 
   container
-    .querySelectorAll('input[name="sol-type"], #solDate, #solYear, #solMonth, #sonDay')
+    .querySelectorAll(`input[name="sol-type"], #solDate, #solYear, #solMonth, #solDay`)
     .forEach((input) => {
       input.addEventListener("input", renderExampleCode);
       input.addEventListener("change", renderExampleCode);
     });
+
+  container.querySelector("#solDate").value = `${DEFAULT_DATE.year}-${String(DEFAULT_DATE.month).padStart(2, "0")}-${String(DEFAULT_DATE.day).padStart(2, "0")}`;
+  container.querySelector("#solYear").value = DEFAULT_DATE.year;
+  container.querySelector("#solMonth").value = DEFAULT_DATE.month;
+  container.querySelector("#solDay").value = DEFAULT_DATE.day;
 
   renderExampleCode();
 })();
