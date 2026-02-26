@@ -1,5 +1,9 @@
 # kor-lunar
 
+[![NPM Version](https://img.shields.io/npm/v/kor-lunar.svg)](https://www.npmjs.com/package/kor-lunar)
+[![NPM Downloads](https://img.shields.io/npm/dm/kor-lunar.svg)](https://www.npmjs.com/package/kor-lunar)
+[![License](https://img.shields.io/npm/l/kor-lunar.svg)](https://github.com/kahyou22/kor-lunar-js/blob/main/LICENSE)
+
 이 라이브러리는 학습용으로 제작되었으며, 한국천문연구원(KASI)의 음력·양력 변환 데이터를 기반으로 한 자바스크립트 라이브러리입니다.  
 네트워크 요청 없이 **오프라인에서도 동작**하고, 별도의 외부 의존성이 없습니다.
 
