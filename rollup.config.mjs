@@ -36,7 +36,7 @@ export default [
   {
     input: "src/index.ts",
     output: {
-      file: "dist/kor-lunar.js",
+      file: "dist/kor-lunar.cjs",
       format: "cjs",
       exports: "auto",
       sourcemap: true,

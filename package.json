@@ -3,7 +3,7 @@
   "version": "1.5.3",
   "type": "module",
   "description": "한국 음력 변환 유틸 / Korean lunar calendar converter",
-  "main": "dist/kor-lunar.js",
+  "main": "dist/kor-lunar.cjs",
   "module": "dist/kor-lunar.esm.js",
   "browser": "dist/kor-lunar.min.js",
   "types": "dist/kor-lunar.d.ts",
@@ -15,10 +15,10 @@
       },
       "require": {
         "types": "./dist/kor-lunar.d.cts",
-        "default": "./dist/kor-lunar.js"
+        "default": "./dist/kor-lunar.cjs"
       },
       "types": "./dist/kor-lunar.d.ts",
-      "default": "./dist/kor-lunar.js"
+      "default": "./dist/kor-lunar.cjs"
     }
   },
   "files": [
