@@ -9,16 +9,23 @@
   "types": "dist/kor-lunar.d.ts",
   "exports": {
     ".": {
+      "import": {
+        "types": "./dist/kor-lunar.d.mts",
+        "default": "./dist/kor-lunar.esm.js"
+      },
+      "require": {
+        "types": "./dist/kor-lunar.d.cts",
+        "default": "./dist/kor-lunar.js"
+      },
       "types": "./dist/kor-lunar.d.ts",
-      "import": "./dist/kor-lunar.esm.js",
-      "require": "./dist/kor-lunar.js"
+      "default": "./dist/kor-lunar.js"
     }
   },
   "files": [
     "dist/"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c rollup.config.mjs",
     "version": "node update-readme-version.js && git add README.md",
     "postversion": "git push && git push --tags"
   },
@@ -41,9 +48,10 @@
   },
   "homepage": "https://github.com/kahyou22/kor-lunar-js#readme",
   "devDependencies": {
-    "rollup": "^4.24.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.0",
+    "rollup": "^4.24.0",
+    "rollup-plugin-dts": "^6.3.0",
     "tslib": "^2.7.0",
     "typescript": "^5.8.3"
   }
