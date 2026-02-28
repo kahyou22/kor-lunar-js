@@ -26,6 +26,9 @@
   ],
   "scripts": {
     "build": "rollup -c rollup.config.mjs",
+    "test": "vitest run && npm run test:compat",
+    "test:unit": "vitest run",
+    "test:compat": "npm run build && attw --pack . && publint && node tests/compat/cjs-test.cjs && node tests/compat/esm-test.mjs",
     "version": "node update-readme-version.js && git add README.md",
     "postversion": "git push && git push --tags"
   },
@@ -48,11 +51,14 @@
   },
   "homepage": "https://github.com/kahyou22/kor-lunar-js#readme",
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.2",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.0",
+    "publint": "^0.3.17",
     "rollup": "^4.24.0",
     "rollup-plugin-dts": "^6.3.0",
     "tslib": "^2.7.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^4.0.18"
   }
 }
