@@ -20,6 +20,7 @@ const copyDtsPlugin = () => ({
       "dist/index.d.ts",
       "dist/kor-lunar.d.ts.map",
       "dist/lunar-table.d.ts",
+      "dist/lunar-calendar.d.ts",
       "dist/solar-table.d.ts",
       "dist/utils.d.ts",
     ];
