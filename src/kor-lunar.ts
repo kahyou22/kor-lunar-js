@@ -3,13 +3,6 @@ import * as SolarTable from "./solar-table";
 import { toInt } from "./utils";
 
 const SOLAR_LUNAR_DAY_DIFF = 20;
-const JULIAN_DAY_DIFF = 2411389;
-
-/** 지원하는 최소 julianDay */
-const MIN_JULIAN_DAY = JULIAN_DAY_DIFF;
-/** 지원하는 최대 julianDay */
-const MAX_JULIAN_DAY =
-  JULIAN_DAY_DIFF + LunarTable.getTotalDays(LunarTable.MAX_YEAR, LunarTable.MAX_MONTH, LunarTable.MAX_DAY, false) - 1;
 
 export interface LunarDate {
   year: number;
@@ -58,7 +51,7 @@ export const toLunar = (solYear: number, solMonth: number, solDay: number): Luna
 
   let day2 = solTotalDays - SOLAR_LUNAR_DAY_DIFF;
 
-  let julianDay = JULIAN_DAY_DIFF + day2 - 1;
+  let julianDay = LunarTable.BASE_JULIAN_DAY + day2 - 1;
   let dayOfWeek = (day2 + 1) % 7;
 
   let isLeapMonth = month === LunarTable.getLeapMonth(year);
@@ -148,11 +141,11 @@ export const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLea
 export const fromJulianDay = (julianDay: number): LunarDate => {
   julianDay = toInt(julianDay);
 
-  if (julianDay < MIN_JULIAN_DAY || julianDay > MAX_JULIAN_DAY) {
+  if (julianDay < LunarTable.BASE_JULIAN_DAY || julianDay > LunarTable.MAX_JULIAN_DAY) {
     throw new RangeError(`지원되지 않는 julianDay입니다. 입력한 값: ${julianDay}`);
   }
 
-  const lunCumDay = julianDay - JULIAN_DAY_DIFF + 1;
+  const lunCumDay = julianDay - LunarTable.BASE_JULIAN_DAY + 1;
 
   let lo = LunarTable.BASE_YEAR;
   let hi = LunarTable.MAX_YEAR;
@@ -194,7 +187,7 @@ export const fromJulianDay = (julianDay: number): LunarDate => {
     }
   }
 
-  const day2 = julianDay - JULIAN_DAY_DIFF + 1;
+  const day2 = julianDay - LunarTable.BASE_JULIAN_DAY + 1;
   const dayOfWeek = (day2 + 1) % 7;
 
   return {

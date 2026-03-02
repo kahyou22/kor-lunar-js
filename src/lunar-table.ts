@@ -176,6 +176,13 @@ export const getTotalDays = (year: number, month: number, day: number, isLeapMon
   return days;
 };
 
+/** 지원하는 최소 julianDay */
+export const BASE_JULIAN_DAY = 2411389;
+
+/** 지원하는 최대 julianDay */
+export const MAX_JULIAN_DAY =
+  BASE_JULIAN_DAY + getTotalDays(MAX_YEAR, MAX_MONTH, MAX_DAY, false) - 1;
+
 export const getSecha = (year: number): string => {
   year = toInt(year);
   const g = gan[(year + 6) % gan.length];
