@@ -25,6 +25,7 @@ export interface SolarDate {
 /**
  * 양력을 음력으로 변환합니다.
  * 양력 지원 날짜 범위: 1890년 1월 21일 ~ 2050년 12월 31일
+ * 날짜의 유효성(존재 여부)은 검사하지 않습니다.
  * @param solYear 양력 연도
  * @param solMonth 양력 월
  * @param solDay 양력 일
@@ -91,6 +92,7 @@ export const toLunar = (solYear: number, solMonth: number, solDay: number): Luna
 /**
  * 음력을 양력으로 변환합니다.
  * 음력 지원 날짜 범위: 1890년 1월 1일 ~ 2050년 11월 18일
+ * 날짜의 유효성(존재 여부)은 검사하지 않습니다.
  * @param lunYear 음력 연도
  * @param lunMonth 음력 월
  * @param lunDay 음력 일
