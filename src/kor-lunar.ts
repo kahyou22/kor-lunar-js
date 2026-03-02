@@ -5,6 +5,12 @@ import { toInt } from "./utils";
 const SOLAR_LUNAR_DAY_DIFF = 20;
 const JULIAN_DAY_DIFF = 2411389;
 
+/** 지원하는 최소 julianDay */
+const MIN_JULIAN_DAY = JULIAN_DAY_DIFF;
+/** 지원하는 최대 julianDay */
+const MAX_JULIAN_DAY =
+  JULIAN_DAY_DIFF + LunarTable.getTotalDays(LunarTable.MAX_YEAR, LunarTable.MAX_MONTH, LunarTable.MAX_DAY, false) - 1;
+
 export interface LunarDate {
   year: number;
   month: number;
@@ -131,6 +137,77 @@ export const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLea
   }
 
   return { year, month, day };
+};
+
+/**
+ * julianDay(율리우스 일)를 음력으로 변환합니다.
+ * julianDay 지원 범위: 2411389 ~ 2470379
+ * @param julianDay 율리우스 일
+ * @returns 음력 날짜
+ */
+export const fromJulianDay = (julianDay: number): LunarDate => {
+  julianDay = toInt(julianDay);
+
+  if (julianDay < MIN_JULIAN_DAY || julianDay > MAX_JULIAN_DAY) {
+    throw new RangeError(`지원되지 않는 julianDay입니다. 입력한 값: ${julianDay}`);
+  }
+
+  const lunCumDay = julianDay - JULIAN_DAY_DIFF + 1;
+
+  let lo = LunarTable.BASE_YEAR;
+  let hi = LunarTable.MAX_YEAR;
+  while (lo < hi) {
+    const mid = (lo + hi + 1) >>> 1;
+    if (LunarTable.getTotalDaysBeforeYear(mid) < lunCumDay) {
+      lo = mid;
+    } else {
+      hi = mid - 1;
+    }
+  }
+  const year = lo;
+
+  let day = lunCumDay - LunarTable.getTotalDaysBeforeYear(year);
+
+  const leapMonth = LunarTable.getLeapMonth(year);
+  let month = 0;
+  let isLeapMonth = false;
+
+  let monthDays;
+
+  for (let m = 1; m <= 12; m++) {
+    monthDays = LunarTable.getMonthDays(year, m);
+    if (day <= monthDays) {
+      month = m;
+      isLeapMonth = false;
+      break;
+    }
+    day -= monthDays;
+
+    if (m === leapMonth) {
+      monthDays = LunarTable.getLeapMonthDays(year, m);
+      if (day <= monthDays) {
+        month = m;
+        isLeapMonth = true;
+        break;
+      }
+      day -= monthDays;
+    }
+  }
+
+  const day2 = julianDay - JULIAN_DAY_DIFF + 1;
+  const dayOfWeek = (day2 + 1) % 7;
+
+  return {
+    year,
+    month,
+    day,
+    isLeapMonth,
+    secha: LunarTable.getSecha(year),
+    wolgeon: isLeapMonth ? "" : LunarTable.getWolgeon(year, month),
+    iljin: LunarTable.getIljinByJulianDay(julianDay),
+    julianDay,
+    dayOfWeek,
+  };
 };
 
 export { LunarTable, SolarTable };

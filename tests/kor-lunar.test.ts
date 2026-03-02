@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { toLunar, toSolar, LunarTable, SolarTable } from "../src/kor-lunar";
+import { toLunar, toSolar, fromJulianDay, LunarTable, SolarTable } from "../src/kor-lunar";
 
 // prettier-ignore
 const fixtures = [
@@ -105,6 +105,29 @@ describe("toSolar", () => {
   });
 });
 
+describe("fromJulianDay", () => {
+  it.each(fixtures)("julianDay $lunar.julianDay -> 음력", ({ lunar }) => {
+    expect(fromJulianDay(lunar.julianDay)).toEqual(lunar);
+  });
+
+  it("경계값: 지원 범위 시작일 (julianDay = 2411389)", () => {
+    const result = fromJulianDay(2411389);
+    expect(result.year).toBe(LunarTable.BASE_YEAR);
+    expect(result.month).toBe(LunarTable.BASE_MONTH);
+    expect(result.day).toBe(LunarTable.BASE_DAY);
+  });
+
+  it("경계값: 지원 범위 마지막일", () => {
+    const lastLunar = toLunar(SolarTable.MAX_YEAR, SolarTable.MAX_MONTH, SolarTable.MAX_DAY);
+    expect(() => fromJulianDay(lastLunar.julianDay)).not.toThrow();
+  });
+
+  it("범위 밖 julianDay는 RangeError", () => {
+    expect(() => fromJulianDay(2411388)).toThrow(RangeError);
+    expect(() => fromJulianDay(2411389 + 100000)).toThrow(RangeError);
+  });
+});
+
 describe("왕복 변환 테스트", () => {
   it("전체 지원 범위에서 toLunar -> toSolar", () => {
     const date = new Date(SolarTable.BASE_YEAR, SolarTable.BASE_MONTH - 1, SolarTable.BASE_DAY);
@@ -118,6 +141,23 @@ describe("왕복 변환 테스트", () => {
       const lunar = toLunar(y, m, d);
       const solar = toSolar(lunar.year, lunar.month, lunar.day, lunar.isLeapMonth);
       expect(solar, `왕복 실패: ${y}-${m}-${d}`).toEqual({ year: y, month: m, day: d });
+
+      date.setDate(date.getDate() + 1);
+    }
+  });
+
+  it("전체 지원 범위에서 toLunar -> fromJulianDay 일치", () => {
+    const date = new Date(SolarTable.BASE_YEAR, SolarTable.BASE_MONTH - 1, SolarTable.BASE_DAY);
+    const end = new Date(SolarTable.MAX_YEAR, SolarTable.MAX_MONTH - 1, SolarTable.MAX_DAY);
+
+    while (date <= end) {
+      const y = date.getFullYear();
+      const m = date.getMonth() + 1;
+      const d = date.getDate();
+
+      const lunar = toLunar(y, m, d);
+      const fromJD = fromJulianDay(lunar.julianDay);
+      expect(fromJD, `fromJulianDay 불일치: julianDay=${lunar.julianDay}`).toEqual(lunar);
 
       date.setDate(date.getDate() + 1);
     }
