@@ -223,6 +223,7 @@ export const getTotalMonths = (year: number, month: number, isLeapMonth: boolean
  * @returns year, month, isLeapMonth
  */
 export const fromTotalMonths = (totalMonths: number): { year: number; month: number; isLeapMonth: boolean } => {
+  totalMonths = toInt(totalMonths);
   const absIndex = totalMonths - 1;
   // binary search로 연도 찾기
   let lo = BASE_YEAR;
@@ -341,6 +342,7 @@ export const getMonthIndex = (year: number, month: number, isLeapMonth: boolean)
  * @returns month (1~12)와 isLeapMonth 여부
  */
 export const getMonthFromIndex = (year: number, monthIndex: number): { month: number; isLeapMonth: boolean } => {
+  monthIndex = toInt(monthIndex);
   const leapMonth = getLeapMonth(year);
   let isLeapMonth = false;
   let index = monthIndex;
