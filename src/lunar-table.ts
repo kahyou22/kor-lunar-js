@@ -176,6 +176,71 @@ export const getTotalDays = (year: number, month: number, day: number, isLeapMon
   return days;
 };
 
+/**
+ * 해당 연도의 총 월 수를 반환합니다. (윤달 포함)
+ * @param year 1890년 ~ 2050년
+ * @returns 윤달이 있으면 13, 없으면 12
+ */
+export const getMonthCount = (year: number): number => {
+  return hasLeapMonth(year) ? 13 : 12;
+};
+
+/**
+ * 연도별 누적 월 수를 초기에 룩업 테이블로 생성하여
+ * O(1)으로 누적 월 수를 가져오게 변환함
+ */
+const monthsBeforeYear: number[] = [];
+monthsBeforeYear[0] = 0;
+for (let y = BASE_YEAR + 1; y <= MAX_YEAR; y++) {
+  const idx = y - BASE_YEAR;
+  monthsBeforeYear[idx] = monthsBeforeYear[idx - 1] + getMonthCount(y - 1);
+}
+
+/**
+ * 1890년부터 해당 연도 전까지의 누적 월 수를 반환합니다. (윤달 포함)
+ * @param year 1890년 ~ 2050년
+ * @returns 해당 연도 전까지의 누적 월 수
+ */
+export const getTotalMonthsBeforeYear = (year: number): number => {
+  year = toInt(year);
+  return monthsBeforeYear[year - BASE_YEAR];
+};
+
+/**
+ * 1890년부터 해당 연도, 월 (및 윤달 포함) 까지의 누적 월 수를 반환합니다.
+ * @param year 1890년 ~ 2050년
+ * @param month 1월 ~ 12월
+ * @param isLeapMonth 대상이 윤달이면 true
+ * @returns 총 누적 월 수
+ */
+export const getTotalMonths = (year: number, month: number, isLeapMonth: boolean): number => {
+  return getTotalMonthsBeforeYear(year) + getMonthIndex(year, month, isLeapMonth) + 1;
+};
+
+/**
+ * 누적 월 수에서 (year, month, isLeapMonth)를 복원합니다.
+ * @param totalMonths 총 누적 월 수
+ * @returns year, month, isLeapMonth
+ */
+export const fromTotalMonths = (totalMonths: number): { year: number; month: number; isLeapMonth: boolean } => {
+  const absIndex = totalMonths - 1;
+  // binary search로 연도 찾기
+  let lo = BASE_YEAR;
+  let hi = MAX_YEAR;
+  while (lo < hi) {
+    const mid = (lo + hi + 1) >>> 1;
+    if (monthsBeforeYear[mid - BASE_YEAR] <= absIndex) {
+      lo = mid;
+    } else {
+      hi = mid - 1;
+    }
+  }
+  const year = lo;
+  const monthIndex = absIndex - monthsBeforeYear[year - BASE_YEAR];
+  const { month, isLeapMonth } = getMonthFromIndex(year, monthIndex);
+  return { year, month, isLeapMonth };
+};
+
 /** 지원하는 최소 julianDay */
 export const BASE_JULIAN_DAY = 2411389;
 
