@@ -243,4 +243,41 @@ export class LunarCalendar {
     const monthStr = cur.isLeapMonth ? `윤${mm}` : mm;
     return `${cur.year}-${monthStr}-${dd}`;
   }
+
+  /**
+   * 한국 전통 방식으로 음력 날짜를 읽기 쉽게 문자열로 반환합니다.
+   * 예: "을사년 정월 보름", "갑진년 윤삼월 초하루"
+   * @returns 한국 전통 방식의 음력 날짜 문자열 표현
+   */
+  toTraditionalString(): string {
+    const cur = this._resolve();
+
+    const monthNames = ["정월", "이월", "삼월", "사월", "오월", "유월", "칠월", "팔월", "구월", "시월", "동짓달", "섣달"];
+
+    const dayNames = ["하루", "이틀", "사흘", "나흘", "닷새", "엿새", "이레", "여드레", "아흐레", "열흘"];
+
+    const monthPrefix = cur.isLeapMonth ? "윤" : "";
+    const monthStr = monthPrefix + monthNames[cur.month - 1];
+
+    const maxDay = cur.isLeapMonth
+      ? LunarTable.getLeapMonthDays(cur.year, cur.month)
+      : LunarTable.getMonthDays(cur.year, cur.month);
+
+    let dayStr;
+    if (cur.day === maxDay) {
+      dayStr = "그믐";
+    } else if (cur.day <= 10) {
+      dayStr = "초" + dayNames[cur.day - 1];
+    } else if (cur.day === 15) {
+      dayStr = "보름";
+    } else if (cur.day < 20) {
+      dayStr = "열" + dayNames[cur.day - 11];
+    } else if (cur.day === 20) {
+      dayStr = "스무날";
+    } else {
+      dayStr = "스무" + dayNames[cur.day - 21];
+    }
+
+    return `${cur.secha}년 ${monthStr} ${dayStr}`;
+  }
 }

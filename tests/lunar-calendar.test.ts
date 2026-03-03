@@ -291,6 +291,74 @@ describe("LunarCalendar", () => {
     });
   });
 
+  describe("toTraditionalString", () => {
+    it("간지 연도 + 정월 초하루", () => {
+      const lc = LunarCalendar.of(2025, 1, 1);
+      expect(lc.toTraditionalString()).toBe("을사년 정월 초하루");
+    });
+
+    it("보름 (15일)", () => {
+      const lc = LunarCalendar.of(2025, 8, 15);
+      expect(lc.toTraditionalString()).toBe("을사년 팔월 보름");
+    });
+
+    it("스무날 (20일)", () => {
+      const lc = LunarCalendar.of(2025, 3, 20);
+      expect(lc.toTraditionalString()).toBe("을사년 삼월 스무날");
+    });
+
+    it("초닷새 (5일)", () => {
+      const lc = LunarCalendar.of(2025, 5, 5);
+      expect(lc.toTraditionalString()).toBe("을사년 오월 초닷새");
+    });
+
+    it("열이틀 (12일)", () => {
+      const lc = LunarCalendar.of(2025, 7, 12);
+      expect(lc.toTraditionalString()).toBe("을사년 칠월 열이틀");
+    });
+
+    it("스무사흘 (23일)", () => {
+      const lc = LunarCalendar.of(2025, 9, 23);
+      expect(lc.toTraditionalString()).toBe("을사년 구월 스무사흘");
+    });
+
+    it("큰달(30일) 그믐", () => {
+      // 2025년 1월은 30일 (큰달)
+      const maxDay = LunarTable.getMonthDays(2025, 1);
+      expect(maxDay).toBe(30);
+      const lc = LunarCalendar.of(2025, 1, 30);
+      expect(lc.toTraditionalString()).toBe("을사년 정월 그믐");
+    });
+
+    it("작은달(29일) 그믐", () => {
+      // 2025년 2월은 29일 (작은달)
+      const maxDay = LunarTable.getMonthDays(2025, 2);
+      expect(maxDay).toBe(29);
+      const lc = LunarCalendar.of(2025, 2, 29);
+      expect(lc.toTraditionalString()).toBe("을사년 이월 그믐");
+    });
+
+    it("윤달 표기", () => {
+      const lc = LunarCalendar.of(2025, 6, 1, true);
+      expect(lc.toTraditionalString()).toBe("을사년 윤유월 초하루");
+    });
+
+    it("섣달 (12월)", () => {
+      const lc = LunarCalendar.of(2025, 12, 1);
+      expect(lc.toTraditionalString()).toBe("을사년 섣달 초하루");
+    });
+
+    it("동짓달 (11월)", () => {
+      const lc = LunarCalendar.of(2025, 11, 10);
+      expect(lc.toTraditionalString()).toBe("을사년 동짓달 초열흘");
+    });
+
+    it("다른 간지 연도 (갑진년)", () => {
+      const lc = LunarCalendar.of(2024, 1, 15);
+      expect(lc.toTraditionalString()).toBe("갑진년 정월 보름");
+    });
+  });
+
   describe("왕복 변환", () => {
     it("of -> toSolar -> fromSolar 왕복", () => {
       const cases = [
