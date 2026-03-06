@@ -40,7 +40,7 @@ npm install kor-lunar
 ### 브라우저 CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/kor-lunar@1.5/dist/kor-lunar.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/kor-lunar@1.6/dist/kor-lunar.min.js"></script>
 ```
 
 CDN 사용 시 전역 변수 `korLunar`로 접근할 수 있습니다.
