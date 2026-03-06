@@ -2,6 +2,14 @@ import * as LunarTable from "./lunar-table";
 import { toLunar, toSolar, fromJulianDay, LunarDate, SolarDate } from "./kor-lunar";
 import { padLeft } from "./utils";
 
+/**
+ * 음력 날짜를 다루는 불변(immutable) 캘린더 클래스입니다.
+ *
+ * @experimental 이 클래스는 실험적입니다.
+ * 설계에 고민 중인 게 많아서
+ * 향후 마이너 버전에서 API(메서드, 반환값, 클래스 이름)가
+ * 변경되거나 제거될 수 있습니다.
+ */
 export class LunarCalendar {
   private readonly _julianDay: number;
   private _cache?: LunarDate;
@@ -135,7 +143,7 @@ export class LunarCalendar {
    * 월 수를 더한 새 음력 날짜를 반환합니다.
    * 윤달도 하나의 독립적인 월로 취급합니다.
    * 대상 월의 일수가 현재 일보다 적으면 마지막 날로 클램핑됩니다.
-   * @param months 더할 월 수 (음수면 빼기)
+   * @param months 더할 월 수 (음수이면 빼기)
    * @returns 새 음력 날짜 객체
    */
   addMonths(months: number): LunarCalendar {
@@ -158,7 +166,7 @@ export class LunarCalendar {
    * 연 수를 더한 새 음력 날짜를 반환합니다.
    * 같은 월/일을 유지하려 시도하며, 윤달이 대상 연도에 없으면 평달로 폴백합니다.
    * 대상 월의 일수가 현재 일보다 적으면 마지막 날로 클램핑됩니다.
-   * @param years 더할 연 수 (음수면 빼기)
+   * @param years 더할 연 수 (음수이면 빼기)
    * @returns 새 음력 날짜 객체
    */
   addYears(years: number): LunarCalendar {
