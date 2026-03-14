@@ -32,6 +32,20 @@ const copyDtsPlugin = () => ({
   },
 });
 
+/**
+ * 주석만 제거하는 terser 설정 (코드 압축, 난독화 없음)
+ * JSDoc은 .d.ts에 포함되어 있음
+ */
+const stripComments = () =>
+  terser({
+    compress: false,
+    mangle: false,
+    format: {
+      comments: false,
+      beautify: true,
+    },
+  });
+
 export default [
   // CommonJS 번들
   {
@@ -40,9 +54,8 @@ export default [
       file: "dist/kor-lunar.cjs",
       format: "cjs",
       exports: "auto",
-      sourcemap: true,
     },
-    plugins: [typescript()],
+    plugins: [typescript(), stripComments()],
   },
   // ESM 번들
   {
@@ -50,9 +63,8 @@ export default [
     output: {
       file: "dist/kor-lunar.esm.js",
       format: "esm",
-      sourcemap: true,
     },
-    plugins: [typescript()],
+    plugins: [typescript(), stripComments()],
   },
   // Minified IIFE 번들
   {
