@@ -202,7 +202,14 @@ export class LunarCalendar {
    * @returns 음력 날짜
    */
   toLunarDate(): LunarDate {
-    return { ...this._resolve() };
+    // ES5 빌드 시 spread 연산자를 사용하면 번들 크기가 커지므로 번들 크기 절약을 위해 수동 복사
+    const c = this._resolve();
+    return {
+      year: c.year, month: c.month, day: c.day,
+      isLeapMonth: c.isLeapMonth, secha: c.secha,
+      wolgeon: c.wolgeon, iljin: c.iljin,
+      julianDay: c.julianDay, dayOfWeek: c.dayOfWeek,
+    };
   }
 
   /**
