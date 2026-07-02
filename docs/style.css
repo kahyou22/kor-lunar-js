@@ -308,6 +308,12 @@ main {
   opacity: 0.8;
 }
 
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
 .btn.sm {
   height: 2rem;
   padding-inline: 0.75rem;
