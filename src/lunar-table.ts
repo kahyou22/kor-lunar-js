@@ -273,7 +273,7 @@ export const getIljinByJulianDay = (julianDay: number): string => {
 
 export const getIljin = (year: number, month: number, day: number, isLeapMonth: boolean): string => {
   const days = getTotalDays(year, month, day, isLeapMonth);
-  return getIljinByJulianDay(days - 1);
+  return getIljinByJulianDay(BASE_JULIAN_DAY + days - 1);
 };
 
 /**

@@ -128,6 +128,30 @@ describe("fromJulianDay", () => {
   });
 });
 
+describe("LunarTable.getIljin", () => {
+  it.each(fixtures)("음력 날짜로 직접 조회한 일진 $lunar.iljin", ({ lunar }) => {
+    const iljin = LunarTable.getIljin(lunar.year, lunar.month, lunar.day, lunar.isLeapMonth);
+    expect(iljin).toBe(lunar.iljin);
+  });
+
+  it("전체 지원 범위에서 toLunar 경유 일진과 일치", () => {
+    const date = new Date(SolarTable.BASE_YEAR, SolarTable.BASE_MONTH - 1, SolarTable.BASE_DAY);
+    const end = new Date(SolarTable.MAX_YEAR, SolarTable.MAX_MONTH - 1, SolarTable.MAX_DAY);
+
+    while (date <= end) {
+      const y = date.getFullYear();
+      const m = date.getMonth() + 1;
+      const d = date.getDate();
+
+      const lunar = toLunar(y, m, d);
+      const iljin = LunarTable.getIljin(lunar.year, lunar.month, lunar.day, lunar.isLeapMonth);
+      expect(iljin, `getIljin 불일치: ${y}-${m}-${d}`).toBe(lunar.iljin);
+
+      date.setDate(date.getDate() + 1);
+    }
+  });
+});
+
 describe("왕복 변환 테스트", () => {
   it("전체 지원 범위에서 toLunar -> toSolar", () => {
     const date = new Date(SolarTable.BASE_YEAR, SolarTable.BASE_MONTH - 1, SolarTable.BASE_DAY);
