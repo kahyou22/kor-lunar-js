@@ -83,6 +83,49 @@ describe("LunarCalendar", () => {
     });
   });
 
+  describe("daysInMonth", () => {
+    it("큰달 (30일)", () => {
+      const lc = LunarCalendar.of(2025, 1, 15);
+      expect(lc.daysInMonth).toBe(30);
+    });
+
+    it("작은달 (29일)", () => {
+      const lc = LunarCalendar.of(2025, 2, 15);
+      expect(lc.daysInMonth).toBe(29);
+    });
+
+    it("윤달 (2025 윤6월 = 29일)", () => {
+      const lc = LunarCalendar.of(2025, 6, 1, true);
+      expect(lc.daysInMonth).toBe(29);
+    });
+
+    it("평달과 윤달의 일 수를 구분", () => {
+      // 2025년 평6월은 30일, 윤6월은 29일
+      expect(LunarCalendar.of(2025, 6, 1).daysInMonth).toBe(30);
+      expect(LunarCalendar.of(2025, 6, 1, true).daysInMonth).toBe(29);
+    });
+
+    it("표의 마지막 달 (2050년 11월)", () => {
+      const lc = LunarCalendar.of(2050, 11, 1);
+      expect(lc.daysInMonth).toBe(30);
+    });
+
+    it("LunarTable 결과와 일치", () => {
+      const cases = [
+        { y: 1890, m: 1, leap: false },
+        { y: 2024, m: 12, leap: false },
+        { y: 2025, m: 6, leap: true },
+      ];
+      for (const { y, m, leap } of cases) {
+        const lc = LunarCalendar.of(y, m, 1, leap);
+        const expected = leap
+          ? LunarTable.getLeapMonthDays(y, m)
+          : LunarTable.getMonthDays(y, m);
+        expect(lc.daysInMonth, `불일치: ${y}-${m} (윤달=${leap})`).toBe(expected);
+      }
+    });
+  });
+
   describe("addDays", () => {
     it("양수 일 더하기", () => {
       const lc = LunarCalendar.of(2025, 1, 1);

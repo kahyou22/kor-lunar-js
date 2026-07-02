@@ -115,6 +115,14 @@ export class LunarCalendar {
     return this._resolve().dayOfWeek;
   }
 
+  /** 이 달의 일 수 (29 또는 30) */
+  get daysInMonth(): number {
+    const cur = this._resolve();
+    return cur.isLeapMonth
+      ? LunarTable.getLeapMonthDays(cur.year, cur.month)
+      : LunarTable.getMonthDays(cur.year, cur.month);
+  }
+
   /** 세차 (예: "을사") */
   get secha(): string {
     return this._resolve().secha;
@@ -276,9 +284,7 @@ export class LunarCalendar {
     const monthPrefix = cur.isLeapMonth ? "윤" : "";
     const monthStr = monthPrefix + monthNames[cur.month - 1];
 
-    const maxDay = cur.isLeapMonth
-      ? LunarTable.getLeapMonthDays(cur.year, cur.month)
-      : LunarTable.getMonthDays(cur.year, cur.month);
+    const maxDay = this.daysInMonth;
 
     let dayStr;
     if (cur.day === maxDay) {
