@@ -21,6 +21,25 @@ export class LunarCalendar {
     this._julianDay = julianDay;
   }
 
+  /** 지원 범위의 첫 날 (음력 1890-01-01) */
+  static readonly MIN = new LunarCalendar(LunarTable.BASE_JULIAN_DAY);
+
+  /** 지원 범위의 마지막 날 (음력 2050-11-18) */
+  static readonly MAX = new LunarCalendar(LunarTable.MAX_JULIAN_DAY);
+
+  /**
+   * 음력 날짜가 유효한지 (지원 범위 내에 실제로 존재하는지) 확인합니다.
+   * of()가 RangeError를 던지지 않고 생성 가능한 날짜인지 미리 검사할 때 사용합니다.
+   * @param year 음력 연도
+   * @param month 음력 월
+   * @param day 음력 일
+   * @param isLeapMonth 윤달 여부 (기본값: false)
+   * @returns 유효한 날짜이면 true
+   */
+  static isValid(year: number, month: number, day: number, isLeapMonth = false): boolean {
+    return LunarTable.isValidDate(year, month, day, isLeapMonth);
+  }
+
   /**
    * 음력 날짜로 생성합니다.
    * @param year 음력 연도 (1890 ~ 2050)

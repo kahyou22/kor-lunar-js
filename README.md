@@ -137,6 +137,12 @@ const nextYear = chuseok.addYears(1);
 chuseok.isBefore(nextDay); // true
 chuseok.equals(chuseok); // true
 nextDay.diffDays(chuseok); // 1
+
+// 유효성 · 지원 범위
+LunarCalendar.isValid(2025, 6, 1, true); // true (2025년에는 윤6월이 있음)
+LunarCalendar.isValid(2025, 1, 1, true); // false (2025년에 윤1월은 없음)
+LunarCalendar.MIN.toString(); // '1890-01-01' (지원 범위 첫 날)
+LunarCalendar.MAX.toString(); // '2050-11-18' (지원 범위 마지막 날)
 ```
 
 > `korLunar.LunarTable`과 `korLunar.SolarTable`을 통해 내부 유틸 함수에 직접 접근할 수도 있습니다.  

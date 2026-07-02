@@ -29,6 +29,75 @@ describe("LunarCalendar", () => {
     });
   });
 
+  describe("isValid", () => {
+    it("유효한 날짜는 true", () => {
+      expect(LunarCalendar.isValid(2025, 8, 15)).toBe(true);
+      expect(LunarCalendar.isValid(2025, 6, 15, true)).toBe(true);
+    });
+
+    it("존재하지 않는 날짜는 false", () => {
+      // 2025년에 윤1월은 없음
+      expect(LunarCalendar.isValid(2025, 1, 1, true)).toBe(false);
+      // 2025년 2월은 29일까지
+      expect(LunarCalendar.isValid(2025, 2, 30)).toBe(false);
+      expect(LunarCalendar.isValid(2025, 13, 1)).toBe(false);
+      expect(LunarCalendar.isValid(2025, 0, 1)).toBe(false);
+    });
+
+    it("지원 범위 밖은 false", () => {
+      expect(LunarCalendar.isValid(1889, 12, 29)).toBe(false);
+      expect(LunarCalendar.isValid(2051, 1, 1)).toBe(false);
+      expect(LunarCalendar.isValid(2050, 11, 19)).toBe(false);
+      expect(LunarCalendar.isValid(2050, 12, 1)).toBe(false);
+    });
+
+    it("경계 날짜는 true", () => {
+      expect(LunarCalendar.isValid(1890, 1, 1)).toBe(true);
+      expect(LunarCalendar.isValid(2050, 11, 18)).toBe(true);
+    });
+
+    it("of와 일관성: isValid가 true면 of는 던지지 않음", () => {
+      const cases = [
+        { y: 2025, m: 8, d: 15, leap: false },
+        { y: 2025, m: 1, d: 1, leap: true },
+        { y: 2050, m: 11, d: 19, leap: false },
+        { y: 1890, m: 1, d: 1, leap: false },
+      ];
+      for (const { y, m, d, leap } of cases) {
+        if (LunarCalendar.isValid(y, m, d, leap)) {
+          expect(() => LunarCalendar.of(y, m, d, leap)).not.toThrow();
+        } else {
+          expect(() => LunarCalendar.of(y, m, d, leap)).toThrow(RangeError);
+        }
+      }
+    });
+  });
+
+  describe("MIN / MAX", () => {
+    it("MIN은 지원 범위의 첫 날", () => {
+      expect(LunarCalendar.MIN.year).toBe(1890);
+      expect(LunarCalendar.MIN.month).toBe(1);
+      expect(LunarCalendar.MIN.day).toBe(1);
+      expect(LunarCalendar.MIN.isLeapMonth).toBe(false);
+      expect(LunarCalendar.MIN.julianDay).toBe(LunarTable.BASE_JULIAN_DAY);
+      expect(LunarCalendar.MIN.equals(LunarCalendar.of(1890, 1, 1))).toBe(true);
+    });
+
+    it("MAX는 지원 범위의 마지막 날", () => {
+      expect(LunarCalendar.MAX.year).toBe(2050);
+      expect(LunarCalendar.MAX.month).toBe(11);
+      expect(LunarCalendar.MAX.day).toBe(18);
+      expect(LunarCalendar.MAX.isLeapMonth).toBe(false);
+      expect(LunarCalendar.MAX.julianDay).toBe(LunarTable.MAX_JULIAN_DAY);
+      expect(LunarCalendar.MAX.equals(LunarCalendar.of(2050, 11, 18))).toBe(true);
+    });
+
+    it("MIN 이전 / MAX 이후로는 이동 불가", () => {
+      expect(() => LunarCalendar.MIN.addDays(-1)).toThrow(RangeError);
+      expect(() => LunarCalendar.MAX.addDays(1)).toThrow(RangeError);
+    });
+  });
+
   describe("fromSolar", () => {
     it("양력에서 생성하면 toLunar 결과와 일치", () => {
       const lc = LunarCalendar.fromSolar(2025, 1, 29);
