@@ -1,6 +1,6 @@
 import * as LunarTable from "./lunar-table";
 import { toLunar, toSolar, fromJulianDay, LunarDate, SolarDate } from "./kor-lunar";
-import { padLeft } from "./utils";
+import { padLeft, toInt } from "./utils";
 
 /**
  * 음력 날짜를 다루는 불변(immutable) 캘린더 클래스입니다.
@@ -15,10 +15,12 @@ export class LunarCalendar {
   private _cache?: LunarDate;
 
   private constructor(julianDay: number) {
-    if (julianDay < LunarTable.BASE_JULIAN_DAY || julianDay > LunarTable.MAX_JULIAN_DAY) {
+    // NaN/Infinity는 toInt로 0이 되어 범위 검사에서 걸러지고, 소수는 절삭되어 정규화됨
+    const jd = toInt(julianDay);
+    if (jd < LunarTable.BASE_JULIAN_DAY || jd > LunarTable.MAX_JULIAN_DAY) {
       throw new RangeError(`지원되지 않는 julianDay입니다. 입력한 값: ${julianDay}`);
     }
-    this._julianDay = julianDay;
+    this._julianDay = jd;
   }
 
   /** 지원 범위의 첫 날 (음력 1890-01-01) */
@@ -47,6 +49,7 @@ export class LunarCalendar {
    * @param day 음력 일
    * @param isLeapMonth 윤달 여부 (기본값: false)
    * @returns 음력 날짜 객체
+   * @throws {RangeError} 유효하지 않거나 지원 범위를 벗어난 날짜이면 발생합니다.
    */
   static of(year: number, month: number, day: number, isLeapMonth = false): LunarCalendar {
     if (!LunarTable.isValidDate(year, month, day, isLeapMonth)) {
@@ -73,6 +76,7 @@ export class LunarCalendar {
    * @param month 양력 월
    * @param day 양력 일
    * @returns 음력 날짜 객체
+   * @throws {RangeError} 지원 범위(양력 1890-01-21 ~ 2050-12-31)를 벗어나면 발생합니다.
    */
   static fromSolar(year: number, month: number, day: number): LunarCalendar {
     const lunar = toLunar(year, month, day);
@@ -83,6 +87,7 @@ export class LunarCalendar {
    * julianDay(율리우스 일)로 생성합니다.
    * @param julianDay 율리우스 일
    * @returns 음력 날짜 객체
+   * @throws {RangeError} 지원 범위(2411389 ~ 2470172)를 벗어나면 발생합니다.
    */
   static fromJulianDay(julianDay: number): LunarCalendar {
     return new LunarCalendar(julianDay);
@@ -161,6 +166,7 @@ export class LunarCalendar {
    * 일 수를 더한 새 음력 날짜를 반환합니다.
    * @param days 더할 일 수 (음수면 빼기)
    * @returns 새 음력 날짜 객체
+   * @throws {RangeError} 결과가 지원 범위를 벗어나면 발생합니다.
    */
   addDays(days: number): LunarCalendar {
     return new LunarCalendar(this._julianDay + days);
@@ -172,6 +178,7 @@ export class LunarCalendar {
    * 대상 월의 일수가 현재 일보다 적으면 마지막 날로 클램핑됩니다.
    * @param months 더할 월 수 (음수이면 빼기)
    * @returns 새 음력 날짜 객체
+   * @throws {RangeError} 결과가 지원 범위를 벗어나면 발생합니다.
    */
   addMonths(months: number): LunarCalendar {
     const cur = this._resolve();
@@ -195,6 +202,7 @@ export class LunarCalendar {
    * 대상 월의 일수가 현재 일보다 적으면 마지막 날로 클램핑됩니다.
    * @param years 더할 연 수 (음수이면 빼기)
    * @returns 새 음력 날짜 객체
+   * @throws {RangeError} 결과가 지원 범위를 벗어나면 발생합니다.
    */
   addYears(years: number): LunarCalendar {
     const cur = this._resolve();
@@ -273,11 +281,11 @@ export class LunarCalendar {
   }
 
   /**
-   * @experimental 출력 형식이 변경될 수 있습니다.
    * 음력 날짜의 문자열 표현을 반환합니다.
    * 평달인 경우: "2025-08-15"
    * 윤달인 경우: "2025-윤06-01"
    * @returns 음력 날짜의 문자열 표현
+   * @experimental 출력 형식이 변경될 수 있습니다.
    */
   toString(): string {
     const cur = this._resolve();
@@ -288,10 +296,10 @@ export class LunarCalendar {
   }
 
   /**
-   * @experimental 출력 형식이 변경될 수 있습니다.
    * 한국 전통 방식으로 음력 날짜를 읽기 쉽게 문자열로 반환합니다.
    * 예: "을사년 정월 보름", "갑진년 윤삼월 초하루"
    * @returns 한국 전통 방식의 음력 날짜 문자열 표현
+   * @experimental 출력 형식이 변경될 수 있습니다.
    */
   toTraditionalString(): string {
     const cur = this._resolve();

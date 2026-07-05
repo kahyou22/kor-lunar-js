@@ -121,6 +121,22 @@ describe("LunarCalendar", () => {
     it("범위 밖 julianDay는 RangeError", () => {
       expect(() => LunarCalendar.fromJulianDay(2411388)).toThrow(RangeError);
     });
+
+    it("NaN/Infinity는 즉시 RangeError", () => {
+      expect(() => LunarCalendar.fromJulianDay(NaN)).toThrow(RangeError);
+      expect(() => LunarCalendar.fromJulianDay(Infinity)).toThrow(RangeError);
+      const lc = LunarCalendar.of(2025, 8, 15);
+      expect(() => lc.addDays(NaN)).toThrow(RangeError);
+    });
+
+    it("소수 julianDay는 절삭되어 정규화", () => {
+      const base = LunarCalendar.fromJulianDay(2460705);
+      const frac = LunarCalendar.fromJulianDay(2460705.9);
+      expect(frac.equals(base)).toBe(true);
+      expect(frac.diffDays(base)).toBe(0);
+      // addDays의 소수도 같은 날로 정규화됨
+      expect(base.addDays(0.5).equals(base)).toBe(true);
+    });
   });
 
   describe("today", () => {
