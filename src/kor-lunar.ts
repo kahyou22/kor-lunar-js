@@ -30,6 +30,7 @@ export interface SolarDate {
  * @param solMonth 양력 월
  * @param solDay 양력 일
  * @returns 음력 날짜
+ * @throws {RangeError} 지원 범위(1890-01-21 ~ 2050-12-31)를 벗어나면 발생합니다.
  */
 export const toLunar = (solYear: number, solMonth: number, solDay: number): LunarDate => {
   solYear = toInt(solYear);
@@ -96,10 +97,11 @@ export const toLunar = (solYear: number, solMonth: number, solDay: number): Luna
  * @param lunYear 음력 연도
  * @param lunMonth 음력 월
  * @param lunDay 음력 일
- * @param isLeapMonth 음력 윤달 여부, 윤달이면 true
+ * @param isLeapMonth 음력 윤달 여부, 윤달이면 true (기본값: false)
  * @returns 양력 날짜
+ * @throws {RangeError} 지원 범위(1890-01-01 ~ 2050-11-18)를 벗어나면 발생합니다.
  */
-export const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLeapMonth: boolean): SolarDate => {
+export const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLeapMonth = false): SolarDate => {
   lunYear = toInt(lunYear);
   lunMonth = toInt(lunMonth);
   lunDay = toInt(lunDay);
@@ -140,6 +142,7 @@ export const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLea
  * 정확한 경계는 LunarTable.BASE_JULIAN_DAY / MAX_JULIAN_DAY 상수를 참조하세요.
  * @param julianDay 율리우스 일
  * @returns 음력 날짜
+ * @throws {RangeError} 지원 범위를 벗어나면 발생합니다.
  */
 export const fromJulianDay = (julianDay: number): LunarDate => {
   julianDay = toInt(julianDay);

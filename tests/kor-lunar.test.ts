@@ -82,6 +82,10 @@ describe("toLunar", () => {
 });
 
 describe("toSolar", () => {
+  it("isLeapMonth 생략 시 평달로 처리", () => {
+    expect(toSolar(2025, 8, 15)).toEqual(toSolar(2025, 8, 15, false));
+  });
+
   it.each(fixtures)("음력 -> 양력 $solar", ({ solar, lunar }) => {
     expect(toSolar(lunar.year, lunar.month, lunar.day, lunar.isLeapMonth)).toEqual(solar);
   });
