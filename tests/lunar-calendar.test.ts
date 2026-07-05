@@ -407,6 +407,93 @@ describe("LunarCalendar", () => {
     });
   });
 
+  describe("diffMonths", () => {
+    it("같은 달이면 일수와 무관하게 0", () => {
+      expect(LunarCalendar.of(2025, 1, 1).diffMonths(LunarCalendar.of(2025, 1, 30))).toBe(0);
+    });
+
+    it("일(day)은 무시하고 월 인덱스만 비교", () => {
+      expect(LunarCalendar.of(2025, 2, 1).diffMonths(LunarCalendar.of(2025, 1, 30))).toBe(1);
+    });
+
+    it("윤달은 독립된 한 달로 카운트", () => {
+      // 2025년: ... 5월, 6월, 윤6월, 7월 ...
+      expect(LunarCalendar.of(2025, 7, 1).diffMonths(LunarCalendar.of(2025, 6, 1))).toBe(2);
+      expect(LunarCalendar.of(2025, 6, 1, true).diffMonths(LunarCalendar.of(2025, 6, 1))).toBe(1);
+    });
+
+    it("연도 경계", () => {
+      expect(LunarCalendar.of(2025, 1, 15).diffMonths(LunarCalendar.of(2024, 12, 15))).toBe(1);
+      // 2025년은 윤6월 포함 13개월
+      expect(LunarCalendar.of(2026, 1, 1).diffMonths(LunarCalendar.of(2025, 1, 1))).toBe(13);
+    });
+
+    it("부호 대칭", () => {
+      const a = LunarCalendar.of(2024, 3, 10);
+      const b = LunarCalendar.of(2025, 8, 20);
+      expect(a.diffMonths(b)).toBe(-b.diffMonths(a));
+    });
+
+    it("addMonths와 왕복 일관: other.addMonths(diff)는 this와 같은 달", () => {
+      const cases = [
+        [LunarCalendar.of(2025, 8, 15), LunarCalendar.of(2024, 12, 1)],
+        [LunarCalendar.of(2025, 6, 10, true), LunarCalendar.of(2025, 1, 30)],
+        [LunarCalendar.of(2024, 5, 1), LunarCalendar.of(2025, 7, 20)],
+      ] as const;
+      for (const [cur, other] of cases) {
+        const moved = other.addMonths(cur.diffMonths(other));
+        expect(moved.year).toBe(cur.year);
+        expect(moved.month).toBe(cur.month);
+        expect(moved.isLeapMonth).toBe(cur.isLeapMonth);
+      }
+    });
+  });
+
+  describe("diffFullMonths", () => {
+    it("한 달을 채우지 못하면 0 (diffMonths와 구분)", () => {
+      const cur = LunarCalendar.of(2025, 2, 1);
+      const other = LunarCalendar.of(2025, 1, 30);
+      expect(cur.diffMonths(other)).toBe(1);
+      expect(cur.diffFullMonths(other)).toBe(0);
+    });
+
+    it("정확히 채우면 1", () => {
+      expect(LunarCalendar.of(2025, 2, 15).diffFullMonths(LunarCalendar.of(2025, 1, 15))).toBe(1);
+    });
+
+    it("클램핑되면 클램핑된 날짜 기준 (addMonths 정책 준수)", () => {
+      // 2025년 1월은 30일, 2월은 29일: 1-30의 한 달 뒤는 2-29(클램핑)
+      expect(LunarCalendar.of(2025, 2, 29).diffFullMonths(LunarCalendar.of(2025, 1, 30))).toBe(1);
+      expect(LunarCalendar.of(2025, 2, 28).diffFullMonths(LunarCalendar.of(2025, 1, 30))).toBe(0);
+    });
+
+    it("음수 방향 대칭", () => {
+      // 1-20 -> 2-15: 26일이라 만 0개월
+      expect(LunarCalendar.of(2025, 1, 20).diffFullMonths(LunarCalendar.of(2025, 2, 15))).toBe(0);
+      // 1-1 -> 2-15: 한 달 넘게 지남
+      expect(LunarCalendar.of(2025, 1, 1).diffFullMonths(LunarCalendar.of(2025, 2, 15))).toBe(-1);
+    });
+
+    it("윤달을 사이에 두면 그만큼 카운트", () => {
+      expect(LunarCalendar.of(2025, 7, 1).diffFullMonths(LunarCalendar.of(2025, 6, 1))).toBe(2);
+      expect(LunarCalendar.of(2025, 6, 15, true).diffFullMonths(LunarCalendar.of(2025, 6, 15))).toBe(1);
+    });
+
+    it("파생 스펙: addMonths(n)은 this를 안 넘고 addMonths(n+1)은 넘는다", () => {
+      const cases = [
+        [LunarCalendar.of(2025, 8, 15), LunarCalendar.of(2024, 12, 20)],
+        [LunarCalendar.of(2025, 7, 5), LunarCalendar.of(2025, 6, 10, true)],
+        [LunarCalendar.of(2026, 2, 1), LunarCalendar.of(2025, 1, 30)],
+      ] as const;
+      for (const [cur, other] of cases) {
+        const n = cur.diffFullMonths(other);
+        expect(n).toBeGreaterThanOrEqual(0);
+        expect(other.addMonths(n).isAfter(cur)).toBe(false);
+        expect(other.addMonths(n + 1).isAfter(cur)).toBe(true);
+      }
+    });
+  });
+
   describe("toString", () => {
     it("평달", () => {
       const lc = LunarCalendar.of(2025, 8, 15);

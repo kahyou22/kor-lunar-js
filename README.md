@@ -137,6 +137,8 @@ const nextYear = chuseok.addYears(1);
 chuseok.isBefore(nextDay); // true
 chuseok.equals(chuseok); // true
 nextDay.diffDays(chuseok); // 1
+nextMonth.diffMonths(chuseok); // 1 (달력상 월 차이, 윤달도 한 달로 카운트)
+nextMonth.diffFullMonths(chuseok); // 1 (만 개월 수)
 
 // 유효성 · 지원 범위
 LunarCalendar.isValid(2025, 6, 1, true); // true (2025년에는 윤6월이 있음)

@@ -281,6 +281,38 @@ export class LunarCalendar {
   }
 
   /**
+   * 두 날짜 사이의 달력상 월수 차이를 반환합니다.
+   * 일(day)은 무시하고 월 인덱스만 비교하며, 윤달도 하나의 독립적인 월로 취급합니다.
+   * this가 other보다 이후이면 양수, 이전이면 음수를 반환합니다.
+   * @returns 달력상 월수 차이
+   */
+  diffMonths(other: LunarCalendar): number {
+    const a = this._resolve();
+    const b = other._resolve();
+    return (
+      LunarTable.getTotalMonths(a.year, a.month, a.isLeapMonth) -
+      LunarTable.getTotalMonths(b.year, b.month, b.isLeapMonth)
+    );
+  }
+
+  /**
+   * 두 날짜 사이의 만 개월 수(꽉 채운 개월 수)를 반환합니다.
+   * other.addMonths(n)이 this를 지나치지 않는, 절댓값이 최대인 n을 반환합니다.
+   * 대상 월의 일수가 부족해 클램핑되는 경우는 addMonths의 클램핑 정책을 따릅니다.
+   * this가 other보다 이후이면 양수, 이전이면 음수를 반환합니다.
+   * @returns 만 개월 수
+   */
+  diffFullMonths(other: LunarCalendar): number {
+    let n = this.diffMonths(other);
+    if (n > 0 && other.addMonths(n).isAfter(this)) {
+      n--;
+    } else if (n < 0 && other.addMonths(n).isBefore(this)) {
+      n++;
+    }
+    return n;
+  }
+
+  /**
    * 음력 날짜의 문자열 표현을 반환합니다.
    * 평달인 경우: "2025-08-15"
    * 윤달인 경우: "2025-윤06-01"
