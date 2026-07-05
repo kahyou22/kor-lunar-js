@@ -116,7 +116,7 @@ chuseok.year; // 2025
 chuseok.month; // 8
 chuseok.day; // 15
 chuseok.isLeapMonth; // false
-chuseok.dayOfWeek; // 0 (일요일)
+chuseok.dayOfWeek; // 1 (월요일)
 chuseok.daysInMonth; // 29 (이 달의 일 수)
 chuseok.secha; // '을사'
 chuseok.wolgeon; // '을유'
