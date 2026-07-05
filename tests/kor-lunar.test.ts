@@ -126,6 +126,18 @@ describe("fromJulianDay", () => {
     expect(() => fromJulianDay(2411388)).toThrow(RangeError);
     expect(() => fromJulianDay(2411389 + 100000)).toThrow(RangeError);
   });
+
+  it("지원 범위 상수가 문서화된 값과 일치", () => {
+    // fromJulianDay JSDoc에 명시된 범위: 2411389 ~ 2470172
+    expect(LunarTable.BASE_JULIAN_DAY).toBe(2411389);
+    expect(LunarTable.MAX_JULIAN_DAY).toBe(2470172);
+    // 상한 = 음력 2050-11-18 (양력 2050-12-31)
+    const last = fromJulianDay(LunarTable.MAX_JULIAN_DAY);
+    expect(last.year).toBe(2050);
+    expect(last.month).toBe(11);
+    expect(last.day).toBe(18);
+    expect(() => fromJulianDay(LunarTable.MAX_JULIAN_DAY + 1)).toThrow(RangeError);
+  });
 });
 
 describe("LunarTable.getIljin", () => {

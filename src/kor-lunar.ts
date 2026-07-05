@@ -136,7 +136,8 @@ export const toSolar = (lunYear: number, lunMonth: number, lunDay: number, isLea
 
 /**
  * julianDay(율리우스 일)를 음력으로 변환합니다.
- * julianDay 지원 범위: 2411389 ~ 2470379
+ * julianDay 지원 범위: 2411389 ~ 2470172 (음력 1890-01-01 ~ 2050-11-18)
+ * 정확한 경계는 LunarTable.BASE_JULIAN_DAY / MAX_JULIAN_DAY 상수를 참조하세요.
  * @param julianDay 율리우스 일
  * @returns 음력 날짜
  */
