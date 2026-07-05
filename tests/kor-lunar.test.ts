@@ -46,9 +46,21 @@ const fixtures = [
   { solar: { year: 2025, month: 8, day: 23 }, lunar: { year: 2025, month: 7, day: 1, isLeapMonth: false, secha: "을사", wolgeon: "갑신", iljin: "갑자", julianDay: 2460911, dayOfWeek: 6 } },
 ];
 
+// prettier-ignore
+const GAN_HANJA: Record<string, string> = { 갑: "甲", 을: "乙", 병: "丙", 정: "丁", 무: "戊", 기: "己", 경: "庚", 신: "辛", 임: "壬", 계: "癸" };
+// prettier-ignore
+const JI_HANJA: Record<string, string> = { 자: "子", 축: "丑", 인: "寅", 묘: "卯", 진: "辰", 사: "巳", 오: "午", 미: "未", 신: "申", 유: "酉", 술: "戌", 해: "亥" };
+const ganjiHanja = (ganji: string) => (ganji ? GAN_HANJA[ganji[0]] + JI_HANJA[ganji[1]] : "");
+const withHanja = (lunar: (typeof fixtures)[number]["lunar"]) => ({
+  ...lunar,
+  sechaHanja: ganjiHanja(lunar.secha),
+  wolgeonHanja: ganjiHanja(lunar.wolgeon),
+  iljinHanja: ganjiHanja(lunar.iljin),
+});
+
 describe("toLunar", () => {
   it.each(fixtures)("양력 $solar -> 음력", ({ solar, lunar }) => {
-    expect(toLunar(solar.year, solar.month, solar.day)).toEqual(lunar);
+    expect(toLunar(solar.year, solar.month, solar.day)).toEqual(withHanja(lunar));
   });
 
   it("경계값: 지원 범위 시작일", () => {
@@ -111,7 +123,7 @@ describe("toSolar", () => {
 
 describe("fromJulianDay", () => {
   it.each(fixtures)("julianDay $lunar.julianDay -> 음력", ({ lunar }) => {
-    expect(fromJulianDay(lunar.julianDay)).toEqual(lunar);
+    expect(fromJulianDay(lunar.julianDay)).toEqual(withHanja(lunar));
   });
 
   it("경계값: 지원 범위 시작일 (julianDay = 2411389)", () => {
@@ -165,6 +177,31 @@ describe("LunarTable.getIljin", () => {
 
       date.setDate(date.getDate() + 1);
     }
+  });
+});
+
+describe("한자 간지", () => {
+  it("천간 '신'은 辛, 지지 '신'은 申으로 구분", () => {
+    // 1971년 세차 "신해" - 천간 신
+    expect(LunarTable.getSecha(1971)).toBe("신해");
+    expect(LunarTable.getSechaHanja(1971)).toBe("辛亥");
+    // 음력 2025-08-15 일진 "무신" - 지지 신
+    expect(LunarTable.getIljin(2025, 8, 15, false)).toBe("무신");
+    expect(LunarTable.getIljinHanja(2025, 8, 15, false)).toBe("戊申");
+  });
+
+  it("윤달의 wolgeonHanja는 빈 문자열", () => {
+    const lunar = toLunar(2025, 7, 25); // 음력 2025년 윤6월 1일
+    expect(lunar.isLeapMonth).toBe(true);
+    expect(lunar.wolgeonHanja).toBe("");
+  });
+
+  it("60일 동안 일진 한자가 60갑자를 모두 순환", () => {
+    const seen = new Set<string>();
+    for (let jd = 2460705; jd < 2460705 + 60; jd++) {
+      seen.add(LunarTable.getIljinHanjaByJulianDay(jd));
+    }
+    expect(seen.size).toBe(60);
   });
 });
 

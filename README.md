@@ -75,8 +75,11 @@ console.log(toLunar(2025, 6, 25));
 //   day: 1,
 //   isLeapMonth: false,
 //   secha: '을사',
+//   sechaHanja: '乙巳',
 //   wolgeon: '계미',
+//   wolgeonHanja: '癸未',
 //   iljin: '을축',
+//   iljinHanja: '乙丑',
 //   julianDay: 2460852,
 //   dayOfWeek: 3
 // }
@@ -121,6 +124,9 @@ chuseok.daysInMonth; // 29 (이 달의 일 수)
 chuseok.secha; // '을사'
 chuseok.wolgeon; // '을유'
 chuseok.iljin; // '무신'
+chuseok.sechaHanja; // '乙巳'
+chuseok.wolgeonHanja; // '乙酉'
+chuseok.iljinHanja; // '戊申'
 
 // 양력 변환
 chuseok.toSolar(); // { year: 2025, month: 10, day: 6 }

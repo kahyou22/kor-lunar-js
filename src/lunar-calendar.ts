@@ -152,14 +152,29 @@ export class LunarCalendar {
     return this._resolve().secha;
   }
 
+  /** 세차 한자 (예: "乙巳") */
+  get sechaHanja(): string {
+    return this._resolve().sechaHanja;
+  }
+
   /** 월건 (윤달이면 빈 문자열) */
   get wolgeon(): string {
     return this._resolve().wolgeon;
   }
 
+  /** 월건 한자 (윤달이면 빈 문자열) */
+  get wolgeonHanja(): string {
+    return this._resolve().wolgeonHanja;
+  }
+
   /** 일진 */
   get iljin(): string {
     return this._resolve().iljin;
+  }
+
+  /** 일진 한자 (예: "壬寅") */
+  get iljinHanja(): string {
+    return this._resolve().iljinHanja;
   }
 
   /**
@@ -241,8 +256,9 @@ export class LunarCalendar {
     const c = this._resolve();
     return {
       year: c.year, month: c.month, day: c.day,
-      isLeapMonth: c.isLeapMonth, secha: c.secha,
-      wolgeon: c.wolgeon, iljin: c.iljin,
+      isLeapMonth: c.isLeapMonth, secha: c.secha, sechaHanja: c.sechaHanja,
+      wolgeon: c.wolgeon, wolgeonHanja: c.wolgeonHanja,
+      iljin: c.iljin, iljinHanja: c.iljinHanja,
       julianDay: c.julianDay, dayOfWeek: c.dayOfWeek,
     };
   }

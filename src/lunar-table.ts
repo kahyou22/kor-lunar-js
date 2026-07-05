@@ -35,6 +35,9 @@ const LUN_TABLE = [
 const gan = ["갑", "을", "병", "정", "무", "기", "경", "신", "임", "계"];
 const ji = ["자", "축", "인", "묘", "진", "사", "오", "미", "신", "유", "술", "해"];
 
+const ganHanja = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];
+const jiHanja = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
+
 export const BASE_YEAR = 1890;
 export const BASE_MONTH = 1;
 export const BASE_DAY = 1;
@@ -249,16 +252,30 @@ export const BASE_JULIAN_DAY = 2411389;
 export const MAX_JULIAN_DAY =
   BASE_JULIAN_DAY + getTotalDays(MAX_YEAR, MAX_MONTH, MAX_DAY, false) - 1;
 
+const sechaIndexes = (year: number): [number, number] => {
+  year = toInt(year);
+  return [(year + 6) % gan.length, (year + 8) % ji.length];
+};
+
+const wolgeonIndexes = (year: number, month: number): [number, number] => {
+  year = toInt(year);
+  month = toInt(month);
+  return [(year * 2 + month + 3) % gan.length, (month + 1) % ji.length];
+};
+
+const iljinIndexes = (julianDay: number): [number, number] => {
+  julianDay = toInt(julianDay);
+  return [(julianDay - 1) % gan.length, (julianDay + 1) % ji.length];
+};
+
 /**
  * 해당 음력 연도의 세차(간지 연도)를 반환합니다.
  * @param year 음력 연도 (1890 ~ 2050)
  * @returns 세차 (예: "을사")
  */
 export const getSecha = (year: number): string => {
-  year = toInt(year);
-  const g = gan[(year + 6) % gan.length];
-  const j = ji[(year + 8) % ji.length];
-  return g + j;
+  const [g, j] = sechaIndexes(year);
+  return gan[g] + ji[j];
 };
 
 /**
@@ -268,11 +285,8 @@ export const getSecha = (year: number): string => {
  * @returns 월건 (예: "무인")
  */
 export const getWolgeon = (year: number, month: number): string => {
-  year = toInt(year);
-  month = toInt(month);
-  const g = gan[(year * 2 + month + 3) % gan.length];
-  const j = ji[(month + 1) % ji.length];
-  return g + j;
+  const [g, j] = wolgeonIndexes(year, month);
+  return gan[g] + ji[j];
 };
 
 /**
@@ -281,10 +295,8 @@ export const getWolgeon = (year: number, month: number): string => {
  * @returns 일진 (예: "임인")
  */
 export const getIljinByJulianDay = (julianDay: number): string => {
-  julianDay = toInt(julianDay);
-  const g = gan[(julianDay - 1) % gan.length];
-  const j = ji[(julianDay + 1) % ji.length];
-  return g + j;
+  const [g, j] = iljinIndexes(julianDay);
+  return gan[g] + ji[j];
 };
 
 /**
@@ -298,6 +310,50 @@ export const getIljinByJulianDay = (julianDay: number): string => {
 export const getIljin = (year: number, month: number, day: number, isLeapMonth: boolean): string => {
   const days = getTotalDays(year, month, day, isLeapMonth);
   return getIljinByJulianDay(BASE_JULIAN_DAY + days - 1);
+};
+
+/**
+ * 해당 음력 연도의 세차(간지 연도)를 한자로 반환합니다.
+ * @param year 음력 연도 (1890 ~ 2050)
+ * @returns 세차 한자 (예: "乙巳")
+ */
+export const getSechaHanja = (year: number): string => {
+  const [g, j] = sechaIndexes(year);
+  return ganHanja[g] + jiHanja[j];
+};
+
+/**
+ * 해당 음력 연월의 월건(간지 월)을 한자로 반환합니다.
+ * @param year 음력 연도 (1890 ~ 2050)
+ * @param month 음력 월 (1 ~ 12)
+ * @returns 월건 한자 (예: "戊寅")
+ */
+export const getWolgeonHanja = (year: number, month: number): string => {
+  const [g, j] = wolgeonIndexes(year, month);
+  return ganHanja[g] + jiHanja[j];
+};
+
+/**
+ * julianDay(율리우스 일)의 일진(간지 일)을 한자로 반환합니다.
+ * @param julianDay 율리우스 일
+ * @returns 일진 한자 (예: "壬寅")
+ */
+export const getIljinHanjaByJulianDay = (julianDay: number): string => {
+  const [g, j] = iljinIndexes(julianDay);
+  return ganHanja[g] + jiHanja[j];
+};
+
+/**
+ * 해당 음력 날짜의 일진(간지 일)을 한자로 반환합니다.
+ * @param year 음력 연도 (1890 ~ 2050)
+ * @param month 음력 월 (1 ~ 12)
+ * @param day 음력 일
+ * @param isLeapMonth 윤달 여부
+ * @returns 일진 한자 (예: "壬寅")
+ */
+export const getIljinHanja = (year: number, month: number, day: number, isLeapMonth: boolean): string => {
+  const days = getTotalDays(year, month, day, isLeapMonth);
+  return getIljinHanjaByJulianDay(BASE_JULIAN_DAY + days - 1);
 };
 
 /**

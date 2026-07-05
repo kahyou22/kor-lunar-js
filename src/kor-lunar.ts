@@ -10,8 +10,11 @@ export interface LunarDate {
   day: number;
   isLeapMonth: boolean;
   secha: string;
+  sechaHanja: string;
   wolgeon: string;
+  wolgeonHanja: string;
   iljin: string;
+  iljinHanja: string;
   julianDay: number;
   dayOfWeek: number;
 }
@@ -83,8 +86,11 @@ export const toLunar = (solYear: number, solMonth: number, solDay: number): Luna
     day,
     isLeapMonth,
     secha: LunarTable.getSecha(year),
+    sechaHanja: LunarTable.getSechaHanja(year),
     wolgeon: isLeapMonth ? "" : LunarTable.getWolgeon(year, month),
+    wolgeonHanja: isLeapMonth ? "" : LunarTable.getWolgeonHanja(year, month),
     iljin: LunarTable.getIljinByJulianDay(julianDay),
+    iljinHanja: LunarTable.getIljinHanjaByJulianDay(julianDay),
     julianDay,
     dayOfWeek,
   };
@@ -202,8 +208,11 @@ export const fromJulianDay = (julianDay: number): LunarDate => {
     day,
     isLeapMonth,
     secha: LunarTable.getSecha(year),
+    sechaHanja: LunarTable.getSechaHanja(year),
     wolgeon: isLeapMonth ? "" : LunarTable.getWolgeon(year, month),
+    wolgeonHanja: isLeapMonth ? "" : LunarTable.getWolgeonHanja(year, month),
     iljin: LunarTable.getIljinByJulianDay(julianDay),
+    iljinHanja: LunarTable.getIljinHanjaByJulianDay(julianDay),
     julianDay,
     dayOfWeek,
   };

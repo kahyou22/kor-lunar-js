@@ -156,9 +156,17 @@ describe("LunarCalendar", () => {
       expect(lc.iljin).toBe("무신");
     });
 
+    it("간지 한자 속성", () => {
+      const lc = LunarCalendar.of(2025, 8, 15);
+      expect(lc.sechaHanja).toBe("乙巳");
+      expect(lc.wolgeonHanja).toBe("乙酉");
+      expect(lc.iljinHanja).toBe("戊申");
+    });
+
     it("윤달의 wolgeon은 빈 문자열", () => {
       const lc = LunarCalendar.of(2025, 6, 1, true);
       expect(lc.wolgeon).toBe("");
+      expect(lc.wolgeonHanja).toBe("");
     });
 
     it("dayOfWeek", () => {
@@ -377,8 +385,11 @@ describe("LunarCalendar", () => {
         day: 1,
         isLeapMonth: false,
         secha: "을사",
+        sechaHanja: "乙巳",
         wolgeon: "무인",
+        wolgeonHanja: "戊寅",
         iljin: "무술",
+        iljinHanja: "戊戌",
         julianDay: 2460705,
         dayOfWeek: 3,
       });
