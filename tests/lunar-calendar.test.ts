@@ -110,6 +110,20 @@ describe("LunarCalendar", () => {
     });
   });
 
+  describe("fromLunarDate", () => {
+    it("toLunar 결과에서 생성", () => {
+      const lunar = toLunar(2025, 10, 6);
+      const lc = LunarCalendar.fromLunarDate(lunar);
+      expect(lc.julianDay).toBe(lunar.julianDay);
+      expect(lc.equals(LunarCalendar.of(2025, 8, 15))).toBe(true);
+    });
+
+    it("toLunarDate 왕복", () => {
+      const lc = LunarCalendar.of(2025, 6, 15, true);
+      expect(LunarCalendar.fromLunarDate(lc.toLunarDate()).equals(lc)).toBe(true);
+    });
+  });
+
   describe("fromJulianDay", () => {
     it("julianDay에서 생성", () => {
       const lc = LunarCalendar.fromJulianDay(2460705);

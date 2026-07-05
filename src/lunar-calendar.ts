@@ -66,8 +66,13 @@ export class LunarCalendar {
    * @param lunarDate 음력 날짜 객체
    * @returns 음력 날짜 객체
    */
-  static from(lunarDate: LunarDate): LunarCalendar {
+  static fromLunarDate(lunarDate: LunarDate): LunarCalendar {
     return new LunarCalendar(lunarDate.julianDay);
+  }
+
+  /** @deprecated `from`은 `fromLunarDate`로 이름이 변경되었습니다. */
+  static from(lunarDate: LunarDate): LunarCalendar {
+    return LunarCalendar.fromLunarDate(lunarDate);
   }
 
   /**
