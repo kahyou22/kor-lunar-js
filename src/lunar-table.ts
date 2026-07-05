@@ -79,7 +79,7 @@ export const getLeapMonth = (year: number): number => {
 /**
  * 해당 연도에 윤달이 있는지를 반환합니다.
  * @param year 1890년 ~ 2050년
- * @return 윤달이 있으면 true
+ * @returns 윤달이 있으면 true
  */
 export const hasLeapMonth = (year: number): boolean => {
   return getLeapMonth(year) !== 0;
@@ -111,7 +111,7 @@ export const getLeapMonthDays = (year: number, month: number): number => {
 /**
  * 해당 연도의 총 일 수를 반환합니다.
  * @param year 1890년 ~ 2050년
- * @return 해당 연도의 총 일 수
+ * @returns 해당 연도의 총 일 수
  */
 export const getYearDays = (year: number): number => {
   return (getYearData(year) >> 17) & 0x1ff;
@@ -130,7 +130,7 @@ for (let y = BASE_YEAR + 1; y <= MAX_YEAR; y++) {
 /**
  * 1890년부터 해당 연도 전까지의 누적 일 수를 반환합니다.
  * @param year 1890년 ~ 2050년
- * @return 해당 연도 전까지의 누적 일 수
+ * @returns 해당 연도 전까지의 누적 일 수
  */
 export const getTotalDaysBeforeYear = (year: number): number => {
   year = toInt(year);
@@ -249,6 +249,11 @@ export const BASE_JULIAN_DAY = 2411389;
 export const MAX_JULIAN_DAY =
   BASE_JULIAN_DAY + getTotalDays(MAX_YEAR, MAX_MONTH, MAX_DAY, false) - 1;
 
+/**
+ * 해당 음력 연도의 세차(간지 연도)를 반환합니다.
+ * @param year 음력 연도 (1890 ~ 2050)
+ * @returns 세차 (예: "을사")
+ */
 export const getSecha = (year: number): string => {
   year = toInt(year);
   const g = gan[(year + 6) % gan.length];
@@ -256,6 +261,12 @@ export const getSecha = (year: number): string => {
   return g + j;
 };
 
+/**
+ * 해당 음력 연월의 월건(간지 월)을 반환합니다.
+ * @param year 음력 연도 (1890 ~ 2050)
+ * @param month 음력 월 (1 ~ 12)
+ * @returns 월건 (예: "무인")
+ */
 export const getWolgeon = (year: number, month: number): string => {
   year = toInt(year);
   month = toInt(month);
@@ -264,6 +275,11 @@ export const getWolgeon = (year: number, month: number): string => {
   return g + j;
 };
 
+/**
+ * julianDay(율리우스 일)의 일진(간지 일)을 반환합니다.
+ * @param julianDay 율리우스 일
+ * @returns 일진 (예: "임인")
+ */
 export const getIljinByJulianDay = (julianDay: number): string => {
   julianDay = toInt(julianDay);
   const g = gan[(julianDay - 1) % gan.length];
@@ -271,6 +287,14 @@ export const getIljinByJulianDay = (julianDay: number): string => {
   return g + j;
 };
 
+/**
+ * 해당 음력 날짜의 일진(간지 일)을 반환합니다.
+ * @param year 음력 연도 (1890 ~ 2050)
+ * @param month 음력 월 (1 ~ 12)
+ * @param day 음력 일
+ * @param isLeapMonth 윤달 여부
+ * @returns 일진 (예: "임인")
+ */
 export const getIljin = (year: number, month: number, day: number, isLeapMonth: boolean): string => {
   const days = getTotalDays(year, month, day, isLeapMonth);
   return getIljinByJulianDay(BASE_JULIAN_DAY + days - 1);

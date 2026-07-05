@@ -19,17 +19,33 @@ export const MAX_VALUE = MAX_YEAR * 10000 + MAX_MONTH * 100 + MAX_DAY;
 
 const totalDaysBeforeYear: number[] = [];
 
+/**
+ * 그레고리력 윤년인지를 반환합니다.
+ * @param year 양력 연도
+ * @returns 윤년이면 true
+ */
 export const isLeapYear = (year: number): boolean => {
   year = toInt(year);
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 };
 
+/**
+ * 해당 양력 월의 일 수를 반환합니다.
+ * @param year 양력 연도
+ * @param month 양력 월 (1 ~ 12)
+ * @returns 월의 일 수 (28 ~ 31)
+ */
 export const getMonthDays = (year: number, month: number): number => {
   month = toInt(month);
   let day = month === 2 && isLeapYear(year) ? LEAP_FEBRUARY_DAY : MONTH_DAYS[month - 1];
   return day;
 };
 
+/**
+ * 해당 양력 연도의 일 수를 반환합니다.
+ * @param year 양력 연도
+ * @returns 연도의 일 수 (365 또는 366)
+ */
 export const getYearDays = (year: number): number => {
   let day = isLeapYear(year) ? LEAP_YEAR_DAY : YEAR_DAY;
   return day;
@@ -45,11 +61,22 @@ for (let y = BASE_YEAR + 1; y <= MAX_YEAR; y++) {
   totalDaysBeforeYear[idx] = totalDaysBeforeYear[idx - 1] + getYearDays(y - 1);
 }
 
+/**
+ * 1890년부터 해당 연도 전까지의 누적 일 수를 반환합니다.
+ * @param year 양력 연도 (1890 ~ 2050)
+ * @returns 해당 연도 전까지의 누적 일 수
+ */
 export const getTotalDaysBeforeYear = (year: number): number => {
   year = toInt(year);
   return totalDaysBeforeYear[year - BASE_YEAR];
 };
 
+/**
+ * 해당 연도 1월 1일부터 해당 월 전까지의 일 수를 반환합니다.
+ * @param year 양력 연도
+ * @param month 양력 월 (1 ~ 12)
+ * @returns 해당 월 전까지의 일 수
+ */
 export const getTotalDaysBeforeMonth = (year: number, month: number): number => {
   let day = 0;
   for (let m = 1; m < month; m++) {
@@ -58,6 +85,13 @@ export const getTotalDaysBeforeMonth = (year: number, month: number): number => 
   return day;
 };
 
+/**
+ * 기준일(1890-01-01)부터 해당 날짜까지의 누적 일 수를 반환합니다 (1890-01-01 = 1).
+ * @param year 양력 연도 (1890 ~ 2050)
+ * @param month 양력 월 (1 ~ 12)
+ * @param day 양력 일
+ * @returns 누적 일 수
+ */
 export const getTotalDays = (year: number, month: number, day: number): number => {
   let days = getTotalDaysBeforeYear(year) + getTotalDaysBeforeMonth(year, month) + day;
   return days;
