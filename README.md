@@ -4,33 +4,14 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/kor-lunar.svg)](https://www.npmjs.com/package/kor-lunar)
 [![License](https://img.shields.io/npm/l/kor-lunar.svg)](https://github.com/kahyou22/kor-lunar-js/blob/main/LICENSE)
 
-한국천문연구원(KASI)의 음력·양력 변환 데이터를 기반으로 한 자바스크립트 라이브러리입니다.  
-네트워크 요청 없이 **오프라인에서도 동작**하고, 별도의 외부 의존성이 없습니다.
+한국천문연구원(KASI) 데이터 기반의 **음력 ↔ 양력 변환**과 **음력 날짜 연산**(가감·비교·간지) 라이브러리입니다.
 
-> **⚠️ 주의:** 데이터는 **2025년 5월 20일 기준**으로 갱신되었습니다.  
-> 이후의 중요한 변경 사항이 반영되지 않을 수 있으므로,  
-> 중요한 작업에는 아래 [한국천문연구원 공식 API](#출처-및-참고-자료)를 사용하시기 바랍니다.
+**1890 ~ 2050년 · 오프라인 동작 · 경량 번들 · Zero Dependencies · TypeScript 타입 내장**
 
-## 특징
+> 변환 데이터는 한국천문연구원(KASI) 공개 데이터를 기반으로 하며, 기준일은 **2025년 5월 20일**입니다.  
+> 기준일 이후의 데이터 개정은 반영되지 않았을 수 있습니다 — 최신 데이터는 [KASI 공식 API](https://www.data.go.kr/data/15012679/openapi.do)에서 확인할 수 있습니다.
 
-- **음력 ↔ 양력 변환** — `toLunar`, `toSolar`
-- **LunarCalendar 클래스** — 음력 날짜 연산 객체 (생성, 연산, 비교)
-- **윤달 처리** — `isLeapMonth` 옵션
-- **음력 간지 출력** — 세차(`secha`), 월건(`wolgeon`), 일진(`iljin`)
-- **TypeScript 지원** — 타입 정의 기본 제공
-- **Zero Dependencies** — 외부 의존성 없음
-- **CJS / ESM / UMD** — 다양한 환경에서 사용 가능
-
-[예제 사이트](https://kahyou22.github.io/kor-lunar-js/)
-
-## 지원 날짜 범위
-
-| 함수                    | 범위                               |
-| ----------------------- | ---------------------------------- |
-| `toLunar` (양력 → 음력) | 1890년 1월 21일 ~ 2050년 12월 31일 |
-| `toSolar` (음력 → 양력) | 1890년 1월 1일 ~ 2050년 11월 18일  |
-
-_범위를 벗어난 날짜가 입력될 경우 `RangeError`가 발생합니다._
+[예제 사이트](https://kahyou22.github.io/kor-lunar-js/)에서 바로 사용해볼 수 있습니다.
 
 ## 설치
 
@@ -63,114 +44,83 @@ Named export도 지원합니다:
 import { toLunar, toSolar, LunarCalendar } from "kor-lunar";
 ```
 
-### 양력 → 음력 (`toLunar`)
+### 양력 → 음력
 
 ```js
-import { toLunar } from "kor-lunar";
-
-console.log(toLunar(2025, 6, 25));
+toLunar(2025, 10, 6);
 // {
 //   year: 2025,
-//   month: 6,
-//   day: 1,
+//   month: 8,
+//   day: 15,
 //   isLeapMonth: false,
 //   secha: '을사',
 //   sechaHanja: '乙巳',
-//   wolgeon: '계미',
-//   wolgeonHanja: '癸未',
-//   iljin: '을축',
-//   iljinHanja: '乙丑',
-//   julianDay: 2460852,
-//   dayOfWeek: 3
+//   wolgeon: '을유',
+//   wolgeonHanja: '乙酉',
+//   iljin: '무신',
+//   iljinHanja: '戊申',
+//   julianDay: 2460955,
+//   dayOfWeek: 1
 // }
 
 // 윤달인 경우
-console.log(toLunar(2025, 7, 25));
+toLunar(2025, 7, 25);
 // { ..., month: 6, isLeapMonth: true, wolgeon: '' }
 // 윤달인 경우 wolgeon은 빈 문자열로 반환됩니다
 ```
 
-### 음력 → 양력 (`toSolar`)
+### 음력 → 양력
 
 ```js
-import { toSolar } from "kor-lunar";
-
-console.log(toSolar(2025, 6, 1, false));
-// { year: 2025, month: 6, day: 25 }
-
-console.log(toSolar(2025, 6, 1, true));
-// { year: 2025, month: 7, day: 25 }
+toSolar(2025, 6, 1);       // { year: 2025, month: 6, day: 25 } — 평달 (기본값)
+toSolar(2025, 6, 1, true); // { year: 2025, month: 7, day: 25 } — 윤6월
 ```
 
-### LunarCalendar
+### 음력 날짜 연산 — `LunarCalendar`
 
-음력 날짜를 다루기 위한 **불변(immutable) 클래스**입니다.  
-날짜 연산, 비교, 변환 등을 지원하며,  
-모든 변경 메서드는 원본을 수정하지 않고 새 객체를 반환합니다.
+불변(immutable) 클래스입니다. 모든 연산은 원본을 바꾸지 않고 새 객체를 반환합니다.
 
 ```js
-import { LunarCalendar } from "kor-lunar";
+const today = LunarCalendar.today();           // 오늘의 음력 날짜
+const chuseok = LunarCalendar.of(2025, 8, 15); // 음력으로 생성
+LunarCalendar.fromSolar(2025, 10, 6);          // 양력으로 생성 (위와 같은 날)
 
-// 음력 날짜로 생성 (2025년 8월 15일, 추석)
-const chuseok = LunarCalendar.of(2025, 8, 15);
+chuseok.toSolar();     // { year: 2025, month: 10, day: 6 }
+chuseok.daysInMonth;   // 29 — 이 달의 일 수
+chuseok.secha;         // '을사' (sechaHanja: '乙巳')
+chuseok.toString();    // '2025-08-15' (윤달은 '2025-윤06-01')
 
-// 속성 접근
-chuseok.year; // 2025
-chuseok.month; // 8
-chuseok.day; // 15
-chuseok.isLeapMonth; // false
-chuseok.dayOfWeek; // 1 (월요일)
-chuseok.daysInMonth; // 29 (이 달의 일 수)
-chuseok.secha; // '을사'
-chuseok.wolgeon; // '을유'
-chuseok.iljin; // '무신'
-chuseok.sechaHanja; // '乙巳'
-chuseok.wolgeonHanja; // '乙酉'
-chuseok.iljinHanja; // '戊申'
+chuseok.addDays(1);    // 하루 뒤 — addMonths(n), addYears(n)도 동일한 방식
+chuseok.addYears(1);   // 내년 같은 음력 날짜 (윤달이 없는 해는 평달로, 일수가 부족하면 말일로)
 
-// 양력 변환
-chuseok.toSolar(); // { year: 2025, month: 10, day: 6 }
-
-// 문자열 표현
-chuseok.toString(); // '2025-08-15' (윤달인 경우 2025-윤06-01)
-
-// 날짜 연산 (원본은 변경되지 않음)
-const nextDay = chuseok.addDays(1);
-const nextMonth = chuseok.addMonths(1);
-const nextYear = chuseok.addYears(1);
-
-// 비교
-chuseok.isBefore(nextDay); // true
-chuseok.equals(chuseok); // true
-nextDay.diffDays(chuseok); // 1
-nextMonth.diffMonths(chuseok); // 1 (달력상 월 차이, 윤달도 한 달로 카운트)
-nextMonth.diffFullMonths(chuseok); // 1 (만 개월 수)
-
-// 유효성 · 지원 범위
-LunarCalendar.isValid(2025, 6, 1, true); // true (2025년에는 윤6월이 있음)
-LunarCalendar.isValid(2025, 1, 1, true); // false (2025년에 윤1월은 없음)
-LunarCalendar.MIN.toString(); // '1890-01-01' (지원 범위 첫 날)
-LunarCalendar.MAX.toString(); // '2050-11-18' (지원 범위 마지막 날)
+chuseok.diffDays(today);        // 일수 차이 (this가 이후면 양수)
+chuseok.diffMonths(today);      // 달력상 월 차이 (윤달도 한 달로 카운트)
+chuseok.isBefore(today);        // false
+LunarCalendar.isValid(2025, 1, 1, true); // false — 2025년에 윤1월은 없음
 ```
 
-> `korLunar.LunarTable`과 `korLunar.SolarTable`을 통해 내부 유틸 함수에 직접 접근할 수도 있습니다.  
-> 이를 통해 더 다양한 기능을 구현할 수 있습니다 — [예제: 음력 달력](https://kahyou22.github.io/kor-lunar-js/#lunarCalendar)
+### 명절 날짜 구하기
 
-## 기여
+```js
+const seollal = LunarCalendar.of(2026, 1, 1); // 설날 = 음력 1월 1일
+seollal.toSolar();                            // { year: 2026, month: 2, day: 17 }
 
-버그 제보, 기능 제안, PR 등 모두 환영합니다.
+// 설 연휴 (전날 ~ 다음날)
+[seollal.addDays(-1), seollal, seollal.addDays(1)].map((d) => d.toSolar());
 
-- 🔍 버그 제보 → [Issues](https://github.com/kahyou22/kor-lunar-js/issues)
-- 💡 기능 제안 → [Issues](https://github.com/kahyou22/kor-lunar-js/issues) 또는 [Discussions](https://github.com/kahyou22/kor-lunar-js/discussions)
-- 💬 질문 · 의견 → [Discussions](https://github.com/kahyou22/kor-lunar-js/discussions)
+LunarCalendar.of(2026, 8, 15).toSolar(); // 추석 → { year: 2026, month: 9, day: 25 }
+```
 
-자유롭게 남겨주세요.
+## 알아둘 것
 
-## 라이선스
+- **지원 범위**: 양력 1890-01-21 ~ 2050-12-31, 음력 1890-01-01 ~ 2050-11-18. 벗어나면 `RangeError`가 발생합니다.
+- **`toLunar` / `toSolar`는 날짜의 실존 여부를 검증하지 않습니다** (예: 없는 윤달, 30일이 없는 달의 30일). 검증이 필요하면 `LunarCalendar.isValid`(boolean) 또는 `LunarCalendar.of`(RangeError)를 사용하세요.
+- **윤달에는 공식 월건이 없어** `wolgeon`/`wolgeonHanja`가 빈 문자열입니다. 앞 달의 월건을 따르는 관례가 필요하면 `LunarTable.getWolgeon(year, month)`를 직접 호출하세요.
+- **`LunarCalendar.today()`는 실행 환경의 로컬 시간 기준**입니다. UTC 서버에서 한국 기준 '오늘'이 필요하면 KST로 변환한 날짜를 `fromSolar`에 넘기세요.
+- **저수준 유틸**(월별 일수, 윤달 위치, 간지 계산 등)은 `LunarTable` / `SolarTable` 네임스페이스로 직접 접근할 수 있습니다 — [예제: 윤달이 있는 해](https://kahyou22.github.io/kor-lunar-js/#leapMonths)
 
-[MIT](LICENSE)
+## 기여 · 라이선스
 
-## 출처 및 참고 자료
+버그 제보, 기능 제안, 질문 모두 환영합니다 — [Issues](https://github.com/kahyou22/kor-lunar-js/issues) · [Discussions](https://github.com/kahyou22/kor-lunar-js/discussions)
 
-- 한국천문연구원: https://www.kasi.re.kr
-- 공공데이터포털: https://www.data.go.kr/data/15012679/openapi.do
+[MIT](LICENSE) · 출처: [한국천문연구원](https://www.kasi.re.kr) · [공공데이터포털 음양력 API](https://www.data.go.kr/data/15012679/openapi.do)
